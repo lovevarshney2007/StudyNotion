@@ -20,10 +20,18 @@ const userSchema = new mongoose.Schema({
         type:String,
         require:true
     },
+    confirmPassword:{
+        type:String,
+        require:true
+    },
     accountType:{
         type:String,
         enum:["Admin","Student","Instructor"],
         require:true
+    },
+    contactNumber:{
+        type:Number,
+        required:true
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
@@ -41,6 +49,7 @@ const userSchema = new mongoose.Schema({
         require:true,
         trim:true
     },
+    
     couseProgress:[
         {
             type:mongoose.Schema.Types.ObjectId,
