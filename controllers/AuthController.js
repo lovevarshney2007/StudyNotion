@@ -293,7 +293,7 @@ exports.changePassword = async(res,req) => {
        await mailSender(
         user.email,
         "Password Changed Successfully",
-        "Your password has been updated. If this wasn’t you, contact support immediately."
+        "Your password has been updated. If this was not you, contact support immediately."
       );
   
       return res.status(200).json({
