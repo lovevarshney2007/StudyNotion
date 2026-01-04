@@ -242,10 +242,72 @@ exports.login = async (res, req) => {
 // changepassword
 // TODO
 exports.changePassword = async(res,req) => {
-    // get data from req body 
-    // get oldpassword,newPassword,confirmNewPassowrd 
-    // validation
-    // update password in db 
-    // send email - password updates 
+    try {
+      // get data from req body 
+      const {email,oldPassword,newPassword,confirmNewPassword} = req.body;
+  
+      // validation
+      if(!oldPassword || !newPassword || !confirmNewPassword){
+        return res.status(400).json({
+          success:false,
+          message:"All fields are required",
+        });
+      }
+  
+      if (newPassword !== confirmNewPassword) {
+        return res.status(400).json({
+          success: false,
+          message: "New password and confirm password do not match",
+        });
+      }
+      // update password in db 
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+  
+      const isPasswordMatch = await bcrypt.compare(
+        oldPassword,
+        user.password
+      );
+  
+      
+      if (!isPasswordMatch) {
+        return res.status(401).json({
+          success: false,
+          message: "Old password is incorrect",
+        });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+       user.password = hashedPassword;
+      await user.save();
+  
+  
+      // send email - password updates 
+  
+       await mailSender(
+        user.email,
+        "Password Changed Successfully",
+        "Your password has been updated. If this wasn’t you, contact support immediately."
+      );
+  
+      return res.status(200).json({
+        success: true,
+        message: "Password changed successfully",
+      });
+  
+  
+    } catch (error) {
+        console.error("chnage password error : ",error);
+    return res.status(500).json({
+      success: false,
+      message: "Eroor occuring while changing password",
+    });
+    }
     // return response
 }
