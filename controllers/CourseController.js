@@ -33,6 +33,7 @@ exports.createCourse = async (req, res) => {
     // check for instructor
     const userid = req.user.id;
     const instructorDetail = await User.findById(userid);
+    // todo: verify that userid and instructor_id are same or different ?
 
     console.log("instructor Detail : ", instructorDetail);
 
@@ -103,7 +104,7 @@ exports.createCourse = async (req, res) => {
 
 exports.showAllCourse = async  (req,res) => {
     try {
-
+        // ToDO: change below code incremently
         const allCourses = await Course.find({},{
             courseName:true,
             price:true,
