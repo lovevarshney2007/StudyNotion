@@ -84,6 +84,8 @@ exports.deteleSection = async (req,res) => {
         // findByidANddeleteSection
         await Section.findByIdAndDelete(sectionId);
 
+        // TODO:(Testing) do we need to delete entry from the course Schema ?? 
+
         // return response
         return res.status(200).json({
             success:true,
