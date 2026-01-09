@@ -57,4 +57,7 @@ exports.createSubSection = async (req, res) => {
 };
 
 // update subsection
+// exports.updatedSubSection = async (req,res) => {
+
+// }
 // delete subsection
