@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
-import User from "../models/UserModel";
-import OTP from "../models/OTPModel";
+import User from "../models/UserModel.js";
+import OTP from "../models/OTPModel.js";
 import jwt from "jsonwebtoken";
 import otpGenerator from "otp-generator";
-import mailSender from "../utils/mailSender";
-import { passwordUpdated } from "../mail/templates/passwordUpdate";
-import Profile from "../models/ProfileModel";
+import mailSender from "../utils/mailSender.js";
+import { passwordUpdated } from "../mail/templates/passwordUpdate.js";
+import Profile from "../models/ProfileModel.js";
 dotenv.config();
 
 // SendOtp
