@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import webhooks from "razorpay/dist/types/webhooks";
 
 // capture the payment and initiate the razorPay order
-exports.capturePayment = async (req, res) => {
+export const capturePayment = async (req, res) => {
   // get Userid and Course Id
   const { course_id } = req.body;
   const userId = req.user.id;
@@ -88,7 +88,7 @@ exports.capturePayment = async (req, res) => {
 
 // verify signature of razorPay
 
-exports.verifySignature = async (req,res) => {
+export const verifySignature = async (req,res) => {
     const webhookSecret = "12345678";
 
     const signature = req.headers("x-razorpay-signature");

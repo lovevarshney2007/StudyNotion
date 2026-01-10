@@ -4,7 +4,7 @@ import uploadImageToCloudinary from "../utils/imageUploader";
 
 // cretae SubSection
 
-exports.createSubSection = async (req, res) => {
+export const createSubSection = async (req, res) => {
   try {
     // data fetch from req.body
     const { sectionId, title, timeDuration, description } = req.body;

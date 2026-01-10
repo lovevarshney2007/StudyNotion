@@ -2,7 +2,7 @@ import Tag from "../models/CategoryModel";
 
 // crreate tag handler function
 
-exports.createCategory = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
     // fetch data
     const { name, description } = req.body;
@@ -36,7 +36,7 @@ exports.createCategory = async (req, res) => {
 
 // getAlltags
 
-exports.showAllCategory = async (req, res) => {
+export const showAllCategory = async (req, res) => {
   try {
     const allTags = await Tag.find({}, { name: true, description: true });
     res.status(200).json({
@@ -52,7 +52,7 @@ exports.showAllCategory = async (req, res) => {
 };
 
 // Category PageDetail
-exports.categoryPageDetails = async (req, res) => {
+export const categoryPageDetails = async (req, res) => {
   try {
     // get categoryId
     const { categoryId } = req.body;

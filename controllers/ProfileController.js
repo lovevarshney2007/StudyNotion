@@ -1,7 +1,7 @@
 import ProfileModel from "../models/ProfileModel";
 import User from "../models/UserModel";
 
-exports.updatePofile = async (req, res) => {
+export const updatePofile = async (req, res) => {
   try {
     // get data
     const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
@@ -45,7 +45,7 @@ exports.updatePofile = async (req, res) => {
 // delete Account
 // Explore -> how can we schedule this deletion user
 
-exports.deleteAccount = async (req, res) => {
+export const deleteAccount = async (req, res) => {
   try {
     // get id
     const id = req.user.id;
@@ -82,7 +82,7 @@ exports.deleteAccount = async (req, res) => {
 
 // crown jop
 
-exports.getAllUserDetails = async(req,res) => {
+export const getAllUserDetails = async(req,res) => {
     try {
         // get id 
         const {id} = req.user.id

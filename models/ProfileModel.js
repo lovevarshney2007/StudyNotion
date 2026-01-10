@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema({
     gender:{
@@ -7,15 +7,16 @@ const profileSchema = new mongoose.Schema({
         required:true
     },
     dateOfBirth:{
-        type:Number,
-        require:true,
+        type:Date,
+        required:true,
     },
     contactNumber:{
-        type:"Number",
-        require:true,
+        type:Number,
+        required:true,
         trim:true
     }
 
 })
 
-module.exports = mongoose.model("Profile",profileSchema)
+const Profile = mongoose.model("Profile",profileSchema)
+export default Profile;

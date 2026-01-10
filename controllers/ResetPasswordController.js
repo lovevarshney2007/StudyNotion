@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 // resetPasswordToken
 
-exports.resetPasswordToken = async (req, res) => {
+export const resetPasswordToken = async (req, res) => {
   try {
     // get email from req body
     const email = req.body.email;
@@ -54,7 +54,7 @@ exports.resetPasswordToken = async (req, res) => {
 };
 
 // resetPassword
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
   try {
     // data fetch
     const { password, confirmPassword, token } = req.body;

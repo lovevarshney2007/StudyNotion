@@ -3,7 +3,7 @@ import Course from "../models/CourseModel"
 
 // create section 
 
-exports.createSection = async (req,res) => {
+export const createSection = async (req,res) => {
     try {
 
         // data fetch 
@@ -46,7 +46,7 @@ exports.createSection = async (req,res) => {
 }
 
 // update section 
-exports.updateSection  = async (req,res) => {
+export const updateSection  = async (req,res) => {
     try {
         // data input 
         const {sectionName,sectionId} = req.body;
@@ -76,7 +76,7 @@ exports.updateSection  = async (req,res) => {
 }
 
 // delete section 
-exports.deteleSection = async (req,res) => {
+export const deteleSection = async (req,res) => {
     try {
         // get ID -> assuming that we are sending id in params   
         const {sectionId} = req.params

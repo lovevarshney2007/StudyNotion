@@ -3,7 +3,7 @@ import Course from "../models/CourseModel"
 import RatingAndReview from "../models/RatingAndReviewModel"
 
 // create rating controller
-exports.createRating = async (req,res) => {
+export const createRating = async (req,res) => {
     try {
         // get user id 
         const userid = req.body;
@@ -66,7 +66,7 @@ exports.createRating = async (req,res) => {
 }
 
 // getAverage rating 
-exports.getAverageRating = async (req,res) => {
+export const getAverageRating = async (req,res) => {
     try {
         // get CourseId
         const courseId = req.body.courseId;
@@ -106,7 +106,7 @@ exports.getAverageRating = async (req,res) => {
 }
 
 // getAllRatingAndReview
-exports.getAllRating = async (req,res) => {
+export const getAllRating = async (req,res) => {
     try {
         const allReview = await RatingAndReview.find({})
                                                .sort({rating:"desc"})

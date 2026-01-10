@@ -3,31 +3,27 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
     firstName: {
         type:String,
-        require:true,
+        required:true,
         trim:true
     },
     lastName:{
         type:String,
-        require:true,
+        required:true,
         trim:true
     },
     email:{
         type:String,
-        require:true,
+        required:true,
         trim:true
     },
     password:{
         type:String,
-        require:true
-    },
-    confirmPassword:{
-        type:String,
-        require:true
+        required:true
     },
     accountType:{
         type:String,
         enum:["Admin","Student","Instructor"],
-        require:true
+        required:true
     },
     contactNumber:{
         type:Number,
@@ -35,7 +31,7 @@ const userSchema = new mongoose.Schema({
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
-        require:true,
+        required:true,
         ref:"Profile",
     },
     couses:[
@@ -46,7 +42,7 @@ const userSchema = new mongoose.Schema({
     ],
     image:{
         type:String,
-        require:true,
+        required:true,
         trim:true
     },
     token : {
@@ -64,4 +60,5 @@ const userSchema = new mongoose.Schema({
     ],
 });
 
-module.exports = mongoose.model("User",userSchema)
+const User = mongoose.model("User",userSchema)
+export default User;

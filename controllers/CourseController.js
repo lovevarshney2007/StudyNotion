@@ -6,7 +6,7 @@ import { uploadImageToCloudinary } from "../utils/imageUploader";
 
 // creting course
 
-exports.createCourse = async (req, res) => {
+export const createCourse = async (req, res) => {
   try {
     // fetching data
     const { courseName, courseDescription, whatYouWillLearn, price, tag } =
@@ -102,7 +102,7 @@ exports.createCourse = async (req, res) => {
 
 // get all course handler function 
 
-exports.showAllCourse = async  (req,res) => {
+export const showAllCourse = async  (req,res) => {
     try {
         // ToDO: change below code incremently
         const allCourses = await Course.find({},{
@@ -134,7 +134,7 @@ exports.showAllCourse = async  (req,res) => {
 }
 
 // get all course 
-exports.getCourseDetails = async (req,res) => {
+export const getCourseDetails = async (req,res) => {
   try {
     // get id 
     const {courseId} = req.body;

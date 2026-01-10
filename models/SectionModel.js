@@ -1,15 +1,19 @@
-import mongoose, { mongo, Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const SectionSchema = new mongoose.Schema({
     sectionName:{
         type:String,
+        required: true,
+      trim: true,
     },
     subSection: [{
         type:mongoose.Schema.Types.ObjectId,
-        require:true,
+        required:true,
         ref:"Subscription",
     }],
    
-})
+},{ timestamps: true })
 
-module.exports = mongoose.model("Section",SectionSchema)
+
+const Section = mongoose.model("Section",SectionSchema);
+export default Section;

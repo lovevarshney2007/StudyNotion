@@ -1,18 +1,31 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const ratingAndReviewSchema = new mongoose.Schema({
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        require:true,
-        ref:"User",
-    },
-    rating:{
-        type:Number,
-        require:true,
-    },
-    review:{
-        require:true, 
-    }
-});
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  rating: {
+    type: Number,
+    required: true,
+  },
+  review: {
+    type: String,
+    required: true,
+    trim: true,
+    min: 1,
+      max: 5,
+  },
+  
+}, { timestamps: true });
 
-module.exports = mongoose.model("RatingAndReview",ratingAndReviewSchema)
+
+// prevent duplicate review by same user on same course
+ratingAndReviewSchema.index({ user: 1, course: 1 }, { unique: true });
+
+const ratingAndReview = mongoose.model(
+  "ratingAndReview",
+  ratingAndReviewSchema
+);
+export default ratingAndReview;
