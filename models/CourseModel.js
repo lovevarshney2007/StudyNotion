@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const courseSchema = new mongoose.Schema({
     courseName:{
@@ -30,8 +30,15 @@ const courseSchema = new mongoose.Schema({
             ref:"ratingAndReview",
         }
     ],
+    price:{
+        type:Number
+    },
     thumbnail:{
         type:String,
+    },
+    tags:{
+        type:[Sting],
+        required:true,
     },
     Category:{
         type:mongoose.Schema.Types.ObjectId,
@@ -41,8 +48,14 @@ const courseSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true
-    }
-    ]
+    }],
+     instructions:{
+        type:[string]
+    },
+    status:{
+        type:String,
+        enum:["Draft","Published"],
+    },
     
 })
 

@@ -134,12 +134,12 @@ exports.verifySignature = async (req,res) => {
                 enrolledStudent.email,
                 "Congratulation from Codehelp",
                 "Congratulation ,you are onboared into new Codehelp course"
-            )
+            );
 
             console.log(emailResponse);
             return res.status(200).json({
                 success:true,
-                message:"Signature verified and course added",=
+                message:"Signature verified and course added",
             })
         } catch (error) {
             console.log(error);
