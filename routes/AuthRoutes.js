@@ -13,4 +13,4 @@ router.post("/login", login);
 // protected route
 router.post("/change-password", auth, changePassword);
 
-export default router;
+export default router;   
