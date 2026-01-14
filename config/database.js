@@ -1,8 +1,7 @@
 import mongoose from "mongoose"
 
 
-
-exports.connect = () =>  {
+const connectDb = () =>  {
     mongoose.connect(process.env.MONGODB_URL)
     .then(() => console.log("Db connected successfully"))
     .catch((error) => {
@@ -11,3 +10,5 @@ exports.connect = () =>  {
         process.exit(1);
     })
 }
+
+export default connectDb;

@@ -1,5 +1,5 @@
 import express from "express"
-import  {sendOtp,signUp,login,changePassword}  from "../controllers/AuthController"
+import  {sendOTP,signUp,login,changePassword}  from "../controllers/AuthController.js"
 
 import {auth} from "../middlewares/authMiddleware.js"
 

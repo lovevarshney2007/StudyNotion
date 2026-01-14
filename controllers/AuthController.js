@@ -6,7 +6,10 @@ import otpGenerator from "otp-generator";
 import mailSender from "../utils/mailSender.js";
 import { passwordUpdated } from "../mail/templates/passwordUpdate.js";
 import Profile from "../models/ProfileModel.js";
+import dotenv from "dotenv"
+
 dotenv.config();
+
 
 // SendOtp
 export const sendOTP = async (req, res) => {
