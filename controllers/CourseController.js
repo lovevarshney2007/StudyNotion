@@ -62,7 +62,7 @@ export const createCourse = async (req, res) => {
     }
 
     // check given tag is valid or not
-    const categoryDetails = await Tag.findById(category);
+    const categoryDetails = await Category.findById(category);
     if (!categoryDetails) {
       return res.status(404).json({
         success: false,
@@ -85,7 +85,7 @@ export const createCourse = async (req, res) => {
       instructor: instructorDetails._id,
       whatYouWillLearn: whatYouWillLearn,
       price,
-      tag: tagDetails._id,
+      category: categoryDetails._id,
       thumbnail: thumbanailImage.secure_Url,
       status,
       instructions
