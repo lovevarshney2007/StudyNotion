@@ -2,9 +2,8 @@ import Category from "../models/CategoryModel.js"
 import Course from "../models/CourseModel.js";
 import CourseProgress from "../models/CourserProgressModel.js";
 import Section from "../models/SectionModel.js";
-import Tag from "../models/TagsModel.js";
 import User from "../models/UserModel.js";
-import { uploadImageToCloudinary } from "../utils/imageUploader.js";
+import  uploadImageToCloudinary  from "../utils/imageUploader.js";
 
 // creting course
 

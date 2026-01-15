@@ -37,7 +37,7 @@ const courseSchema = new mongoose.Schema({
         type:String,
     },
     tags:{
-        type:[Sting],
+        type:[String],
         required:true,
     },
     Category:{
@@ -50,7 +50,7 @@ const courseSchema = new mongoose.Schema({
         required:true
     }],
      instructions:{
-        type:[string]
+        type:[String]
     },
     status:{
         type:String,

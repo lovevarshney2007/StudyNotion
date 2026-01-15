@@ -87,7 +87,7 @@ export const deleteAccount = async (req, res) => {
 export const getAllUserDetails = async (req, res) => {
   try {
     // get id
-    const { id } = req.user.id;
+    const  id  = req.user.id;
 
     // validation and user details
     const userDetails = await User.findById(id)

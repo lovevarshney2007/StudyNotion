@@ -1,6 +1,6 @@
-import SubSection from "../models/SubSectionModel";
-import Section from "../models/SectionModel";
-import uploadImageToCloudinary from "../utils/imageUploader";
+import SubSection from "../models/SubSectionModel.js";
+import Section from "../models/SectionModel.js";
+import uploadImageToCloudinary from "../utils/imageUploader.js";
 
 // cretae SubSection
 
