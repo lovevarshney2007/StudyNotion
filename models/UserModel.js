@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema({
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,
         ref:"Profile",
     },
     couses:[
@@ -42,12 +41,12 @@ const userSchema = new mongoose.Schema({
     ],
     image:{
         type:String,
-        required:true,
+        // required:true,
         trim:true
     },
     token : {
         type:String,
-        required:true
+        // required:true
     },
     resetPasswordExpire:{
         type:Date
