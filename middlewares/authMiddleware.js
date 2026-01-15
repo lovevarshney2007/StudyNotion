@@ -2,11 +2,14 @@ import jwt from "jsonwebtoken"
 import  dotenv from "dotenv"
 import User from "../models/UserModel.js"
 
+dotenv.config()
+
+
 // auth 
 export const auth = async(req,res,next) => {
     try {
         // extract token
-        const token = req.cookies.token || req.body.token || req.header("Authorization").replace("Bearer ","");
+        const token = req.cookies.token || req.body.token || req.header("Authorization").replace("Bearer ", "");
         // if token is missing then return response
         if(!token){
             return res.status(401).json({
@@ -17,7 +20,7 @@ export const auth = async(req,res,next) => {
 
         // verify token 
         try {
-            const deocode =  jwt.verify(token,process.env.JWT_SECRET);
+            const decode =  jwt.verify(token,process.env.JWT_SECRET);
             console.log(decode);
             req.user = decode;
         } catch (error) {

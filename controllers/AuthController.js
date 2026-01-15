@@ -279,8 +279,12 @@ export const login = async (req, res) => {
 
 export const changePassword = async (req, res) => {
   try {
+    console.log("REQ BODY:", req.body);
+
     // Get User Data from req.user
     const userDetails = await User.findById(req.user.id);
+    console.log("REQ BODY:", req.body);
+
 
     // validate
     if (!userDetails) {

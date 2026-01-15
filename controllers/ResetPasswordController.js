@@ -1,5 +1,5 @@
-import User from "../models/UserModel";
-import mailSender from "../utils/mailSender";
+import User from "../models/UserModel.js";
+import mailSender from "../utils/mailSender.js";
 import bcrypt from "bcrypt";
 
 // resetPasswordToken
@@ -76,7 +76,7 @@ export const resetPassword = async (req, res) => {
       });
     }
     // token time check
-    if (userDetails.resetPasswordExpire > Date.now()) {
+    if (userDetails.resetPasswordExpire < Date.now()) {
       return res.json({
         success: false,
         message: "Token is expired,please regenerate your token",

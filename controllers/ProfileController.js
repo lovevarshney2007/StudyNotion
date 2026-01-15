@@ -1,5 +1,7 @@
-import ProfileModel from "../models/ProfileModel";
-import User from "../models/UserModel";
+import ProfileModel from "../models/ProfileModel.js";
+import User from "../models/UserModel.js";
+import uploadImageToCloudinary from "../utils/imageUploader.js";
+import dotenv from "dotenv";
 
 export const updatePofile = async (req, res) => {
   try {
@@ -21,10 +23,11 @@ export const updatePofile = async (req, res) => {
     const profileDetails = await ProfileModel.findById(profileId);
 
     // update profile
-    profileDetails.dateOfBirth = dateOfBirth;
+    profileDetails.dateOfBirth = new Date(dateOfBirth);
     profileDetails.about = about;
     profileDetails.gender = gender;
     profileDetails.contactNumber = contactNumber;
+  
     await profileDetails.save();
 
     // return response
@@ -71,35 +74,98 @@ export const deleteAccount = async (req, res) => {
       success: true,
       message: "User deleted successfully",
     });
-
   } catch (error) {
     return res.status(500).json({
-        success:false,
-        message:"Internal Server Error while deleteing account "
-    })
+      success: false,
+      message: "Internal Server Error while deleteing account ",
+    });
   }
 };
 
 // crown jop
 
-export const getAllUserDetails = async(req,res) => {
-    try {
-        // get id 
-        const {id} = req.user.id
+export const getAllUserDetails = async (req, res) => {
+  try {
+    // get id
+    const { id } = req.user.id;
 
-        // validation and user details
-        const userDetails = await User.findById(id).populate("additionalDetails").exec();
+    // validation and user details
+    const userDetails = await User.findById(id)
+      .populate("additionalDetails")
+      .exec();
 
-        // return res
-        return res.status(200).json({
-            success:true,
-            message:"User Data Fetched Successfully",
-        })
+    // return res
+    return res.status(200).json({
+      success: true,
+      message: "User Data Fetched Successfully",
+      userDetails
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
-    } catch (error) {
-         return res.status(500).json({
-        success:false,
-        message:error.message
+export const updateDisplayPicture = async (req, res) => {
+  try {
+    const displayPicture = req.files.displayPicture;
+    const userId = req.user.id;
+    // upload to cloudinary
+    const image = await uploadImageToCloudinary(
+      displayPicture,
+      process.env.FOLDER_NAME,
+      1000,
+      1000
+    );
+    console.log(image);
+
+    // update profile
+    const updatedProfile = await User.findByIdAndUpdate(
+      { _id: userId },
+      { image: image.secure_url },
+      { new: true }
+    );
+    // return response
+    res.send({
+      success: true,
+      message: "Image successfully updated",
+      data: {
+        updatePofile,
+        image
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// getEnrolledCourses
+export const getEnrolledCourses = async (req, res) => {
+  try {
+    //get user id 
+    const userId = req.user.id;
+    // find the user
+    let courseDetails = await User.findOne({
+      _id:userId,
     })
-    }
-}
+    .populate({
+      path:"courses",
+      populate:{
+        path:"courseContent",
+        populate:{
+          path:"subSection",
+        }
+      }
+    })
+    .exec();
+    // continue later
+  } catch (error) {
+    
+  }
+};
