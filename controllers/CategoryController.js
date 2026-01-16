@@ -1,8 +1,11 @@
 import Category from "../models/CategoryModel.js";
 import Tag from "../models/CategoryModel.js";
 
-// crreate tag handler function
+function getRandomInt(max){
+  return Math.floor(Math.random()*max);
+}
 
+// crreate Category handler function
 export const createCategory = async (req, res) => {
   try {
     // fetch data

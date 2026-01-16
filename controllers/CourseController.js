@@ -2,6 +2,7 @@ import Category from "../models/CategoryModel.js"
 import Course from "../models/CourseModel.js";
 import CourseProgress from "../models/CourserProgressModel.js";
 import Section from "../models/SectionModel.js";
+import SubSection from "../models/SubSectionModel.js";
 import User from "../models/UserModel.js";
 import  uploadImageToCloudinary  from "../utils/imageUploader.js";
 
@@ -122,7 +123,7 @@ export const createCourse = async (req, res) => {
 };
 
 // Edit course details 
-export const editCouse = async (req,res) => {
+export const editCourse = async (req,res) => {
   try {
     const {courseId} = req.body
     const updates = req.body
@@ -357,4 +358,87 @@ export const getFullCourseDetails = async (req,res) => {
 }
 
 // Get a list of Course for a given Instructor
+export const getInstructorCourses = async (req,res) => {
+  try {
+    const instructorId = req.user.id;
+
+    const isInstructorCourse = await Course.find({
+      instructor:instructorId
+    })
+    .sort({createdAt: -1})
+    .populate({
+      path:"courseContent",
+      populate:{
+        path:"subSection",
+      }
+    })
+    .exec();
+
+    res.status(200).json({
+      success:true,
+      data:isInstructorCourse,
+      
+    })
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success:false,
+      message:"Failed To Retrive instructor Course",
+      error:error.message
+    })
+  }
+}
+
 // Delete the Course
+export const deleteCourse = async (req,res) => {
+  try {
+    
+    const {courseId} = req.body;
+
+    const course = await Course.findById(courseId);
+    if(!course){
+      return res.status(404).json({
+        success:false,
+        message:"Course Not Found"
+      })
+    }
+
+    const studentEnrolled = course.studentEntrolled;
+    for(const studentId of studentEnrolled){
+      await User.findByIdAndUpdate(studentId,{
+        $pull:{courses:courseId},
+      });
+    }
+
+    const courseSections = course.courseContent;
+    for(const sectionId of courseSections){
+      const section = await Section.findById(sectionId);
+
+      if(section){
+        const subSections = section.subSection;
+        for(const subSectionId of subSections){
+          await SubSection.findByIdAndDelete(subSectionId);
+        }
+      }
+
+      await Section.findByIdAndDelete(sectionId);
+    }
+    await Course.findByIdAndDelete(courseId);
+
+    return res.status(200).json({
+      success:true,
+      message:"Course deleted Successfully",
+    });
+
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success:false,
+      message:"Server Error during deletion course",
+      error:error.message
+    })
+  }
+}
+
