@@ -1,6 +1,8 @@
+import Course from "../models/CourseModel.js";
 import ProfileModel from "../models/ProfileModel.js";
 import User from "../models/UserModel.js";
 import uploadImageToCloudinary from "../utils/imageUploader.js";
+import Course from '../models/CourseModel.js'
 import dotenv from "dotenv";
 
 export const updatePofile = async (req, res) => {
@@ -169,3 +171,41 @@ export const getEnrolledCourses = async (req, res) => {
     
   }
 };
+// Instructor dashword for payment amount
+export const instructorDashword = async(req,res) => {
+  try {
+    // fetch insturtor course details
+    const courseDetails = await Course.find({
+      instructor:req.user.id
+    });
+    
+    // Fetch data 
+    const courseData = courseDetails.map((course) => {
+      const totalStudentEnrolled = course.studentEntrolled.length;
+      const totalAmountGenerated = totalStudentEnrolled.course.price;
+
+   
+
+    const courseDataWithStats = {
+      _id:Course._id,
+      courseName:Course.courseName,
+      courseDescription:Courseurse.courseDescription,
+      totalStudentEnrolled,
+      totalAmountGenerated
+    };
+    return courseDataWithStats;
+
+     });
+  
+
+    // return response 
+    return res.status(200).json({
+      course:courseData
+    })
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message:"Internal Server error in instrucor dashword "
+    })
+  }
+}
