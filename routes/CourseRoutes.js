@@ -43,7 +43,7 @@ router.post("/addSubSection",auth,isInstructor,createSubSection),
 
 // Rating And Review course
 router.post("/createRating",auth,isStudent,createRating);
-router.get("/getAverageRating",getaverageRating);
+router.get("/getAverageRating",getAverageRating);
 router.get("/getReviews",getAllRatingReview);
 
 export default router;
