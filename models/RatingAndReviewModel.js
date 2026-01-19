@@ -25,7 +25,7 @@ const ratingAndReviewSchema = new mongoose.Schema({
 ratingAndReviewSchema.index({ user: 1, course: 1 }, { unique: true });
 
 const ratingAndReview = mongoose.model(
-  "ratingAndReview",
+  "RatingAndReview",
   ratingAndReviewSchema
 );
 export default ratingAndReview;

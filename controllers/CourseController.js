@@ -5,6 +5,8 @@ import Section from "../models/SectionModel.js";
 import SubSection from "../models/SubSectionModel.js";
 import User from "../models/UserModel.js";
 import  uploadImageToCloudinary  from "../utils/imageUploader.js";
+import convertSecondsToDuration from "../utils/SecToDuration.js";
+
 
 // creting course
 
@@ -231,9 +233,7 @@ export const getCourseDetails = async (req,res) => {
     // get id 
     const {courseId} = req.body;
     // find course detail
-    const courseDeatails  = await Course.find(
-      {_id:courseId}
-    )
+    const courseDeatails  = await Course.findById(courseId)
     .populate(
       {
          path:"instructor", 
@@ -242,8 +242,8 @@ export const getCourseDetails = async (req,res) => {
          },
       }
     )
-    .populate("category")
-    .populate("ratingAndReviews")
+    .populate("Category")
+    // .populate("RatingAndReview")
     .populate({
       path:"courseContent",
       populate:{
@@ -261,10 +261,10 @@ export const getCourseDetails = async (req,res) => {
       });
     }
 
-    let totalDurationInSeconds = 0
-    courseDeatails.courseContent.forEach((content) => {
-      content.subSection.forEach((subSection) => {
-        const timeDurationInSeconds = parseInt(subSection.timeDuration)
+    let totalDurationInSeconds = 0;
+    ( courseDeatails.courseContent || []).forEach((content) => {
+      (content.subSection || []).forEach((subSection) => {
+        const timeDurationInSeconds = parseInt(subSection.timeDuration) || 0
         totalDurationInSeconds += timeDurationInSeconds
       })
     })
