@@ -7,9 +7,9 @@ import {createSection,updateSection,deleteSection} from "../controllers/SectionC
 
 import {createSubSection,updateSubSection,deleteSubSection} from "../controllers/SubSectionController.js"
 
-import {createRating,getAverageRating,getAllRatingReview} from '../controllers/RatingAndReveiw.js'
+import {createRating,getAverageRating,getAllRating} from '../controllers/RatingAndReveiw.js'
 
-import {updateCourseProgress,getProgressPercentage} from "../controllers/courseProgress.js"
+import {updateCourseProgress} from "../controllers/CourseProgressController.js"
 
 import {auth,isInstructor,isAdmin, isStudent} from "../middlewares/authMiddleware.js"
 
@@ -44,6 +44,6 @@ router.post("/addSubSection",auth,isInstructor,createSubSection),
 // Rating And Review course
 router.post("/createRating",auth,isStudent,createRating);
 router.get("/getAverageRating",getAverageRating);
-router.get("/getReviews",getAllRatingReview);
+router.get("/getReviews",getAllRating);
 
 export default router;

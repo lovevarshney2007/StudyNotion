@@ -76,7 +76,7 @@ export const updateSection  = async (req,res) => {
 }
 
 // delete section 
-export const deteleSection = async (req,res) => {
+export const deleteSection = async (req,res) => {
     try {
         // get ID -> assuming that we are sending id in params   
         const {sectionId} = req.params

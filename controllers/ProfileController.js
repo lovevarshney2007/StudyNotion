@@ -2,7 +2,6 @@ import Course from "../models/CourseModel.js";
 import ProfileModel from "../models/ProfileModel.js";
 import User from "../models/UserModel.js";
 import uploadImageToCloudinary from "../utils/imageUploader.js";
-import Course from '../models/CourseModel.js'
 import dotenv from "dotenv";
 
 export const updatePofile = async (req, res) => {

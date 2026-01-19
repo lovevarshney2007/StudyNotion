@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Course from "../models/CourseModel"
-import RatingAndReview from "../models/RatingAndReviewModel"
+import Course from "../models/CourseModel.js"
+import RatingAndReview from "../models/RatingAndReviewModel.js"
 
 // create rating controller
 export const createRating = async (req,res) => {
@@ -132,3 +132,4 @@ export const getAllRating = async (req,res) => {
         })
     }
 }
+

@@ -1,6 +1,6 @@
 import Category from "../models/CategoryModel.js"
 import Course from "../models/CourseModel.js";
-import CourseProgress from "../models/CourserProgressModel.js";
+import CourseProgress from "../models/CourseProgressModel.js";
 import Section from "../models/SectionModel.js";
 import SubSection from "../models/SubSectionModel.js";
 import User from "../models/UserModel.js";
