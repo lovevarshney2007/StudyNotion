@@ -1,5 +1,6 @@
 import Section from "../models/SectionModel.js";
 import Course from "../models/CourseModel.js"
+import SubSection from "../models/SubSectionModel.js";
 
 // create section 
 
@@ -75,27 +76,57 @@ export const updateSection  = async (req,res) => {
     }
 }
 
-// delete section 
+// delete Section
 export const deleteSection = async (req,res) => {
     try {
-        // get ID -> assuming that we are sending id in params   
-        const {sectionId} = req.params
- 
-        // findByidANddeleteSection
+        // Fetch sectionId and courseId
+        const {sectionId,courseId} = req.body;
+
+        if(!sectionId || !courseId){
+            return res.status(400).json({
+                success:false,
+                message:"SectionId and CourseId are required"
+            })
+        }
+
+             const section = await Section.findById(sectionId);
+
+             if(!section){
+                return res.status(404).json({
+                    success:false,
+                    message:"Section not found"
+                })
+             }
+
+             // if subSection exist , delte them
+             if(section.subSection && section.subSection.length > 0){
+                await SubSection.deleteMany({
+                    _id:{ $in: section.subSection},
+                })
+             }
+
+        // Remove Section Referece from Course
+        await Course.findByIdAndUpdate(courseId,{
+            $pull: {courseContent:sectionId}
+        });
+
+        // Delete the Section 
         await Section.findByIdAndDelete(sectionId);
+ 
 
-        // TODO:(Testing) do we need to delete entry from the course Schema ?? 
-
-        // return response
+        // Return Response
         return res.status(200).json({
             success:true,
             message:"Section deleted Successfully"
         })
-        
+
     } catch (error) {
+        
+        console.error("Delete Section Error : ",error);
+
         return res.status(500).json({
             success:false,
-            message:"Unable to update section please try again",
+            message:"Unable to delete Section",
             error:error.message
         })
     }
