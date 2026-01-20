@@ -1,5 +1,5 @@
 import Course from "../models/CourseModel.js";
-import ProfileModel from "../models/ProfileModel.js";
+import Profile from "../models/ProfileModel.js";
 import User from "../models/UserModel.js";
 import uploadImageToCloudinary from "../utils/imageUploader.js";
 import dotenv from "dotenv";
@@ -76,6 +76,7 @@ export const deleteAccount = async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error while deleteing account ",

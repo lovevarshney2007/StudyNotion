@@ -9,19 +9,26 @@ export const createSubSection = async (req, res) => {
     // data fetch from req.body
     const { sectionId, title, timeDuration, description } = req.body;
     // extract file/video
-    const video = req.files.videoFile;
+    const video = req.files?.video;
+
     // data validation
-    if (!sectionId || !title || !timeDuration || !description) {
+    if (!sectionId || !title || !timeDuration || !description || !video) {
       return res.status(400).json({
         success: false,
         messgae: "ALL fields are required",
       });
     }
+
+    console.log("FILES:", req.files);
+
+
     // uploadToCloudinary or folder
     const uploadDetails = await uploadImageToCloudinary(
       video,
-      proccess.env.FOLDER_NAME
+      process.env.FOLDER_NAME
     );
+    console.log("UPLOAD DETAILS:", uploadDetails);
+
     // create a sub-section
     const SubSectionDetails = await SubSection.create({
       title: title,
@@ -29,12 +36,14 @@ export const createSubSection = async (req, res) => {
       description: description,
       videoUrl: uploadDetails.secure_url,
     });
+    console.log("Video URL:", uploadDetails.secure_url);
+
     // update section with this subsection ObjectId
     const updatedSection = await Section.findByIdAndUpdate(
       { _id: sectionId },
       {
         $push: {
-          SubSection: SubSectionDetails._id,
+          subSection: SubSectionDetails._id,
         },
       },
       { new: true }
@@ -49,9 +58,11 @@ export const createSubSection = async (req, res) => {
       updatedSection,
     });
   } catch (error) {
+    console.error("Create SubSection Error : ",error)
     return res.status(500).json({
       success: false,
-      message: "Error during create SUbsection",
+      message: "Error during create Subsection",
+      error:error.error
     });
   }
 };
@@ -63,7 +74,7 @@ export const updateSubSection = async (req,res) => {
     const {sectionId,subSectionId,title,description} = req.body;
 
     // Search Subsection 
-    const subSection = await subSection.findById(subSectionId);
+    const subSection = await SubSection.findById(subSectionId);
 
     if(!subSection){
       return res.status(404).json({
@@ -98,7 +109,7 @@ export const updateSubSection = async (req,res) => {
     await subSection.save();
 
     // Send Updated SubSection 
-    const updatedSection = await Section.findById(sectionId).populate("subsection");
+    const updatedSection = await Section.findById(sectionId).populate("subSection");
 
     // return response
     return res.status(200).json({

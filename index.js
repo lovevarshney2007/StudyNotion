@@ -20,7 +20,7 @@ const app = express();
 
 app.use(fileUpload({
   useTempFiles: true,
-  tempFileDir: "/tmp"
+  tempFileDir: "./tmp"
 }));
 
 app.use(express.json());
