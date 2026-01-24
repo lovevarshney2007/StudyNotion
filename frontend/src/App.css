@@ -4,3 +4,14 @@
 html,body{
   overflow-x: hidden;
 }
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+/* Global Font Apply */
+body {
+  font-family: var(--font-inter);
+  @apply bg-richblack-900 text-white;
+}
