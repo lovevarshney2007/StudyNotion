@@ -136,7 +136,9 @@ export default Home
 
 
 // Home work 
-// add footer 
+
 // add shadow 
 // add gradient 
 // mobile view 
+
+
