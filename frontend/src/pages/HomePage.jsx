@@ -9,6 +9,7 @@ import TimeLineSection from '../component/core/HomePage/TimeLineSection'
 import LearningLanguageSection from '../component/core/HomePage/LearningLanguageSection'
 import InstructorSection from "../component/core/HomePage/InstructorSection"
 import Footer from "../component/common/Footer"
+import ExploreMore from '../component/core/HomePage/ExploreMore'
 
 const Home = () => {
     return (
@@ -76,9 +77,11 @@ const Home = () => {
                         backgroundGrdient={"bg-gradient-to-br from-blue-400 to-cyan-500"}
                     />
                 </div>
-            </div> {/* Section 1 ka limited box yahan band ho raha hai */}
+                    
+                    <ExploreMore />
+            </div>
 
-            {/* Section 2 - White Background (Full Width) */}
+            {/* Section 2 */} 
             <div className='bg-pure-greys-5 text-richblack-700'>
                 <div className='homepage_bg h-[310px] w-full'>
                     <div className='w-11/12 max-w-maxContent flex flex-col justify-between items-center gap-5 mx-auto'>
@@ -127,6 +130,8 @@ const Home = () => {
             {/* Footer  */}
 
             <Footer />
+
+            
 
         </div>
     )
