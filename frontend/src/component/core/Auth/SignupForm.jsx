@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
+import { ACCOUNT_TYPE } from "../../../../utils/constants"
+import { toast } from "react-hot-toast"
+import Tab from "../../common/Tab"
+import { setSignupData } from "../../../../slices/authSlice" 
+import { sendOtp } from "../../../../services/operations/authAPI"
 
 function SignupForm() {
     const navigate = useNavigate()

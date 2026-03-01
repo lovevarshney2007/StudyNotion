@@ -5,6 +5,12 @@ import './App.css'
 import {Route,Routes} from "react-router-dom"
 import Home from "./pages/HomePage.jsx"
 import Navbar from "./component/common/NavBar.jsx"
+import Catalog from "./pages/CatalogPage.jsx";
+import CourseDetails from "./pages/CourseDetails.jsx"
+import OpenRoute from "./component/core/Auth/OpenRoute"
+import Signup from "./pages/SignupPage.jsx";
+import Login from "./pages/LoginPage.jsx"
+
 
 function App() {
   return (

@@ -2,6 +2,9 @@ import React from 'react'
 import { AiOutlineEyeInvisible } from 'react-icons/ai'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { AiOutlineEye } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
 
 
 
@@ -25,11 +28,11 @@ function LoginForm(){
       [e.target.name] : e.target.value
     }))
   }
-}
+
 
 const handleOnSubmit = (e) => {
   e.preventDefault()
-  dispatch(login(email,password,navigate))
+  // dispatch(login(email,password,navigate))
 }
 
 return (
@@ -81,5 +84,6 @@ return (
     </button>
   </form>
 )
+}
 
 export default LoginForm
