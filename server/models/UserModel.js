@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
     },
     contactNumber:{
         type:Number,
-        required:true
+        // required:true
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,

@@ -1,20 +1,22 @@
 import {createSlice} from "@reduxjs/toolkit"
-import { setToken } from "./authSlice"
 
 const initialState = {
-    user:null,
+    user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null,
+    loading: false,
+};
 
-}
-
-const profileSLice = createSlice({
+const profileSlice = createSlice({
     name:"profile",
-    initialState:initialState,
-    reducers:{
-        setUser(state,value){
-            state.user = value.payload
-        }
-    }
-})
+    initialState: initialState,
+    reducers: {
+        setUser(state, value) {
+            state.user = value.payload;
+        },
+        setLoading(state, value) {
+            state.loading = value.payload;
+          },
+    },
+});
 
-export const {setUser} = profileSLice.actions;
-export default profileSLice.reducer
+export const {setUser, setLoading} = profileSlice.actions;
+export default profileSlice.reducer;

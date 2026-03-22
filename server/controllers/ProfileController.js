@@ -2,15 +2,12 @@ import Course from "../models/CourseModel.js";
 import Profile from "../models/ProfileModel.js";
 import User from "../models/UserModel.js";
 import uploadImageToCloudinary from "../utils/imageUploader.js";
-import dotenv from "dotenv";
 
 export const updatePofile = async (req, res) => {
   try {
-    // get data
     const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
-    // get Userid
     const id = req.user.id;
-    // validation
+
     if (!contactNumber || !gender || !id) {
       return res.status(400).json({
         success: false,
@@ -18,24 +15,25 @@ export const updatePofile = async (req, res) => {
       });
     }
 
-    // find profile
     const userDetails = await User.findById(id);
     const profileId = userDetails.additionalDetails;
-    const profileDetails = await ProfileModel.findById(profileId);
+    const profileDetails = await Profile.findById(profileId);
 
-    // update profile
-    profileDetails.dateOfBirth = new Date(dateOfBirth);
+    profileDetails.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
     profileDetails.about = about;
     profileDetails.gender = gender;
     profileDetails.contactNumber = contactNumber;
-  
+
     await profileDetails.save();
 
-    // return response
+    const updatedUserDetails = await User.findById(id)
+      .populate("additionalDetails")
+      .exec();
+
     return res.status(200).json({
       success: true,
       message: "Profile Updated Successfully",
-      profileDetails,
+      updatedUserDetails,
     });
   } catch (error) {
     return res.status(500).json({
@@ -46,15 +44,9 @@ export const updatePofile = async (req, res) => {
   }
 };
 
-// delete Account
-// Explore -> how can we schedule this deletion user
-
 export const deleteAccount = async (req, res) => {
   try {
-    // get id
     const id = req.user.id;
-
-    // validation
     const userDetails = await User.findById(id);
 
     if (!userDetails) {
@@ -63,14 +55,10 @@ export const deleteAccount = async (req, res) => {
         message: "User not found",
       });
     }
-    // delete profile
-    await Profile.findByIdAndDelete({ _id: userDetails.additionalDetails });
-    // todo: hw uneroll user from all enrolled courses
 
-    // delete user
+    await Profile.findByIdAndDelete({ _id: userDetails.additionalDetails });
     await User.findByIdAndDelete({ _id: id });
 
-    // return res
     return res.status(200).json({
       success: true,
       message: "User deleted successfully",
@@ -84,23 +72,18 @@ export const deleteAccount = async (req, res) => {
   }
 };
 
-// crown jop
-
 export const getAllUserDetails = async (req, res) => {
   try {
-    // get id
-    const  id  = req.user.id;
+    const id = req.user.id;
 
-    // validation and user details
     const userDetails = await User.findById(id)
       .populate("additionalDetails")
       .exec();
 
-    // return res
     return res.status(200).json({
       success: true,
       message: "User Data Fetched Successfully",
-      userDetails
+      data: userDetails,
     });
   } catch (error) {
     return res.status(500).json({
@@ -114,29 +97,24 @@ export const updateDisplayPicture = async (req, res) => {
   try {
     const displayPicture = req.files.displayPicture;
     const userId = req.user.id;
-    // upload to cloudinary
+
     const image = await uploadImageToCloudinary(
       displayPicture,
       process.env.FOLDER_NAME,
       1000,
       1000
     );
-    console.log(image);
 
-    // update profile
     const updatedProfile = await User.findByIdAndUpdate(
       { _id: userId },
       { image: image.secure_url },
       { new: true }
-    );
-    // return response
-    res.send({
+    ).populate("additionalDetails");
+
+    return res.status(200).json({
       success: true,
       message: "Image successfully updated",
-      data: {
-        updatePofile,
-        image
-      }
+      data: updatedProfile,
     });
   } catch (error) {
     console.log(error);
@@ -147,65 +125,63 @@ export const updateDisplayPicture = async (req, res) => {
   }
 };
 
-// getEnrolledCourses
 export const getEnrolledCourses = async (req, res) => {
   try {
-    //get user id 
     const userId = req.user.id;
-    // find the user
-    let courseDetails = await User.findOne({
-      _id:userId,
+    const userDetails = await User.findById(userId).lean();
+    const enrolledCourseIds = userDetails?.couses || [];
+
+    const courseDetails = await Course.find({
+      _id: { $in: enrolledCourseIds },
     })
-    .populate({
-      path:"courses",
-      populate:{
-        path:"courseContent",
-        populate:{
-          path:"subSection",
-        }
-      }
-    })
-    .exec();
-    // continue later
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec();
+
+    return res.status(200).json({
+      success: true,
+      data: courseDetails,
+    });
   } catch (error) {
-    
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    })
   }
 };
-// Instructor dashword for payment amount
-export const instructorDashword = async(req,res) => {
+
+export const instructorDashboard = async (req, res) => {
   try {
-    // fetch insturtor course details
     const courseDetails = await Course.find({
-      instructor:req.user.id
+      instructor: req.user.id,
     });
-    
-    // Fetch data 
-    const courseData = courseDetails.map((course) => {
-      const totalStudentEnrolled = course.studentEntrolled.length;
-      const totalAmountGenerated = totalStudentEnrolled.course.price;
 
-   
+    const courses = courseDetails.map((course) => {
+      const totalStudentEnrolled = course.studentEnrolled.length;
+      const totalAmountGenerated = totalStudentEnrolled * (course.price || 0);
 
-    const courseDataWithStats = {
-      _id:Course._id,
-      courseName:Course.courseName,
-      courseDescription:Courseurse.courseDescription,
-      totalStudentEnrolled,
-      totalAmountGenerated
-    };
-    return courseDataWithStats;
+      return {
+        _id: course._id,
+        courseName: course.courseName,
+        courseDescription: course.courseDescription,
+        totalStudentEnrolled,
+        totalAmountGenerated,
+      };
+    });
 
-     });
-  
-
-    // return response 
     return res.status(200).json({
-      course:courseData
+      success: true,
+      courses,
     })
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      message:"Internal Server error in instrucor dashword "
+      success: false,
+      message: "Internal Server error in instrucor dashboard ",
     })
   }
 }

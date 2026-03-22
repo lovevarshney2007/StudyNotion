@@ -10,7 +10,7 @@ function OpenRoute({children}) {
         return children
     }
     else {
-        return <Navigate to="/dashword/my-profile"/>
+        return <Navigate to="/dashboard/my-profile"/>
     }
     
  

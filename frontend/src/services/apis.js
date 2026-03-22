@@ -2,7 +2,7 @@ const BASE_URL = import.meta.env.VITE_APP_BASE_URL
 
 // Auth Endpoints 
 export const endpoints = {
-    SENDOTP_API: BASE_URL + "/auth/sendotp",
+    SENDOTP_API: BASE_URL + "/auth/send-otp",
     SIGNUP_API: BASE_URL + "/auth/signup",
   LOGIN_API: BASE_URL + "/auth/login",
   RESETPASSTOKEN_API: BASE_URL + "/auth/reset-password-token",

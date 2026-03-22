@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { AiOutlineEye } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-
+import {login} from "../../../services/operations/authAPI"
 
 
 
@@ -32,7 +32,7 @@ function LoginForm(){
 
 const handleOnSubmit = (e) => {
   e.preventDefault()
-  // dispatch(login(email,password,navigate))
+  dispatch(login(email,password,navigate))
 }
 
 return (

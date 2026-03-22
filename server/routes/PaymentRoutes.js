@@ -1,11 +1,15 @@
 import express from "express"
-import { isStudent,isInstructor,isAdmin,auth } from "../middlewares/authMiddleware";
-
-import {capturePayment,verifyPayment} from "../controllers/PaymentController.js"
+import { auth, isStudent } from "../middlewares/authMiddleware.js"
+import {
+  capturePayment,
+  verifyPayment,
+  SendPaymentSuccessEmail,
+} from "../controllers/PaymentController.js"
 
 const router = express.Router();
 
-router.post("/capturePayment",auth,isStudent,capturePayment)
-router.post("/verifySignature",auth,isStudent,verifyPayment)
+router.post("/capturePayment", auth, isStudent, capturePayment)
+router.post("/verifyPayment", auth, isStudent, verifyPayment)
+router.post("/sendPaymentSuccessEmail", auth, isStudent, SendPaymentSuccessEmail)
 
 export default router;

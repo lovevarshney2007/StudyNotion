@@ -110,7 +110,7 @@ export const signUp = async (req, res) => {
       password,
       confirmPassword,
       accountType,
-      contactNumber,
+      // contactNumber,
       otp,
     } = req.body;
 
@@ -122,8 +122,8 @@ export const signUp = async (req, res) => {
       !email ||
       !password ||
       !confirmPassword ||
-      !otp ||
-      !contactNumber
+      !otp 
+      // !contactNumber
     ) {
       return res.status(403).json({
         success: false,
@@ -189,7 +189,7 @@ export const signUp = async (req, res) => {
       firstName,
       lastName,
       email,
-      contactNumber,
+      // contactNumber,
       password: hashedPassword,
       accountType,
       additionalDetails: profileDetails._id,

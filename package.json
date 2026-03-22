@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^9.2.1"
+    "concurrently": "^9.2.1",
+    "react-dropzone": "^15.0.0",
+    "react-super-responsive-table": "^6.0.2"
   }
 }
