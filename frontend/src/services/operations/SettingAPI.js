@@ -31,7 +31,7 @@ export function updateDisplayPicture(token, formData) {
       toast.success("Display Picture Updated Successfully")
       dispatch(setUser(response.data.data))
     } catch (error) {
-      console.log("UPDATE_DISPLAY_PICTURE_API API ERROR............", error)
+      console.log("UPDATE_DISPLAY_PICTURE_API API ERROR............", error.response?.data || error)
       toast.error("Could Not Update Display Picture")
     }
     toast.dismiss(toastId)
@@ -58,7 +58,7 @@ export function updateProfile(token, formData) {
       )
       toast.success("Profile Updated Successfully")
     } catch (error) {
-      console.log("UPDATE_PROFILE_API API ERROR............", error)
+      console.log("UPDATE_PROFILE_API API ERROR............", error.response?.data || error)
       toast.error("Could Not Update Profile")
     }
     toast.dismiss(toastId)

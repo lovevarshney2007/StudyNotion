@@ -5,7 +5,7 @@ import uploadImageToCloudinary from "../utils/imageUploader.js";
 
 export const updatePofile = async (req, res) => {
   try {
-    const { dateOfBirth = "", about = "", contactNumber, gender } = req.body;
+    const { firstName = "", lastName = "", dateOfBirth = "", about = "", contactNumber, gender } = req.body;
     const id = req.user.id;
 
     if (!contactNumber || !gender || !id) {
@@ -25,6 +25,12 @@ export const updatePofile = async (req, res) => {
     profileDetails.contactNumber = contactNumber;
 
     await profileDetails.save();
+
+    // Update user first/last name
+    await User.findByIdAndUpdate(id, {
+      firstName,
+      lastName,
+    });
 
     const updatedUserDetails = await User.findById(id)
       .populate("additionalDetails")

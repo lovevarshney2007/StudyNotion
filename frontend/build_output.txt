@@ -1,0 +1,11 @@
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 184 modules transformed.
+[31m✗[39m Build failed in 6.19s
+[31merror during build:
+[31mCould not resolve "../../../../Asset/Logo/Logo-Full-Dark.png" from "src/component/core/Dashboard/CertificateModal.jsx"[31m
+file: [36mE:/Dev_Projects/StudyNotion/frontend/src/component/core/Dashboard/CertificateModal.jsx[31m
+    at getRollupError (file:///E:/Dev_Projects/StudyNotion/frontend/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///E:/Dev_Projects/StudyNotion/frontend/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+    at ModuleLoader.handleInvalidResolvedId (file:///E:/Dev_Projects/StudyNotion/frontend/node_modules/rollup/dist/es/shared/node-entry.js:21706:24)
+    at file:///E:/Dev_Projects/StudyNotion/frontend/node_modules/rollup/dist/es/shared/node-entry.js:21666:26[39m

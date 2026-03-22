@@ -92,7 +92,7 @@ const VideoDetails = () => {
     } else {
       const nextSectionId = courseSectionData[currentSectionIndx + 1]._id
       const nextSubSectionId =
-        courseSectionData[currentSectionIndx + 1].subSection[0]._id
+        courseSectionData[currentSectionIndx + 1]?.subSection?.[0]?._id
       navigate(
         `/view-course/${courseId}/section/${nextSectionId}/sub-section/${nextSubSectionId}`
       )

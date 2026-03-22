@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react"
 import ProgressBar from "@ramonak/react-progress-bar"
 import { BiDotsVerticalRounded } from "react-icons/bi"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { getUserEnrolledCourses } from "../../../services/operations/ProfileAPi"
+import CourseReviewModal from "../ViewCourse/CourseReviewModal"
+import CertificateModal from "./CertificateModal"
+import { setEntireCourseData } from "../../../slices/viewCourseSlice"
 
 export default function EnrolledCourses() {
   const { token } = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
   const [enrolledCourses, setEnrolledCourses] = useState(null)
+  const [reviewModal, setReviewModal] = useState(false)
+  const [certificateModal, setCertificateModal] = useState(null)
+  const dispatch = useDispatch()
+  
   const getEnrolledCourses = async () => {
     try {
       const res = await getUserEnrolledCourses(token);
@@ -82,11 +89,37 @@ export default function EnrolledCourses() {
                   height="8px"
                   isLabelVisible={false}
                 />
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      dispatch(setEntireCourseData(course))
+                      setReviewModal(true)
+                    }}
+                    className="w-fit rounded-md bg-yellow-50 px-3 py-1 text-sm font-semibold text-richblack-900 transition-colors duration-200 hover:bg-yellow-25"
+                  >
+                    Write Review
+                  </button>
+                  
+                  {course.progressPercentage === 100 && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setCertificateModal(course)
+                      }}
+                      className="w-fit rounded-md bg-caribbeangreen-100 px-3 py-1 text-sm font-semibold text-richblack-900 transition-colors duration-200 hover:bg-caribbeangreen-50"
+                    >
+                      Certificate
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
+      {reviewModal && <CourseReviewModal setReviewModal={setReviewModal} />}
+      {certificateModal && <CertificateModal course={certificateModal} setCertificateModal={setCertificateModal} />}
     </>
   )
 }

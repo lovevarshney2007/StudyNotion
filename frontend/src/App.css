@@ -99,8 +99,9 @@ details > summary::-webkit-details-marker {
   /* backdrop-filter: blur(26px); */
 }
 .homepage_bg {
-  background: url("../src/assets/Images/bghome.svg");
-  /* background-size: contain; */
+  background: url("./Asset/Image/bghome.svg");
+  background-size: cover;
+  background-position: center;
 }
 
 @keyframes spinner-bulqg1 {

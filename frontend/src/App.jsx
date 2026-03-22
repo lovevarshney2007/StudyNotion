@@ -14,6 +14,10 @@ import UpdatePassword from "./pages/UpdatePasswordPage.jsx"
 import VerifyEmail from "./pages/VerifyEmailPage.jsx"
 import About from "./pages/AboutPage.jsx"
 import Contact from "./pages/ContactPage.jsx"
+import HelpCenter from "./pages/HelpCenterPage.jsx"
+import PrivacyPolicy from "./pages/PrivacyPolicyPage.jsx"
+import Terms from "./pages/TermsPage.jsx"
+import SearchResults from "./pages/SearchResults.jsx"
 import MyProfile from "./component/core/Dashboard/MyProfile"
 import Dashboard from "./pages/DashboradPage.jsx"
 import PrivateRoute from "./component/core/Auth/PrivateRoute"
@@ -21,6 +25,7 @@ import Error from "./pages/ErrorPage.jsx"
 import Settings from "./component/core/Dashboard/Settings"
 import EnrolledCourses from "./component/core/Dashboard/EnrolledCourses"
 import Cart from "./component/core/Dashboard/Cart"
+import PurchaseHistory from "./component/core/Dashboard/PurchaseHistory.jsx" // Added import
 import { ACCOUNT_TYPE } from "./utils/constants"
 import AddCourse from "./component/core/Dashboard/AddCourse"
 import MyCourses from "./component/core/Dashboard/MyCourses"
@@ -38,7 +43,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="catalog/:catalogueName" element={<Catalog />} />
+        <Route path="catalog/:catalogName" element={<Catalog />} />
         <Route path="courses/:courseId" element={<CourseDetails />} />
 
         <Route
@@ -84,6 +89,11 @@ function App() {
 
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="help-center" element={<HelpCenter />} />
+        <Route path="privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="terms" element={<Terms />} />
+        <Route path="cookie-policy" element={<PrivacyPolicy />} />
+        <Route path="search/:searchQuery" element={<SearchResults />} />
 
         <Route
           path="dashboard"
@@ -101,6 +111,7 @@ function App() {
             <>
               <Route path="cart" element={<Cart />} />
               <Route path="enrolled-courses" element={<EnrolledCourses />} />
+              <Route path="purchase-history" element={<PurchaseHistory />} /> {/* Added route */}
             </>
           )}
 

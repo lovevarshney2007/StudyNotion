@@ -4,8 +4,9 @@ import { HiOutlineGlobeAlt } from "react-icons/hi"
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
+import { addToCart } from "../slices/cartSlice"
 
-import ConfirmationModal from "../component/common/ConformationModal"
+import ConfirmationModal from "../component/common/ConfirmationModal"
 import Footer from "../component/common/Footer"
 import RatingStars from "../component/common/RatingStars"
 import CourseAccordionBar from "../component/core/Course/CourseAccordionBar"
@@ -177,7 +178,25 @@ function CourseDetails() {
               <button className="yellowButton" onClick={handleBuyCourse}>
                 Buy Now
               </button>
-              <button className="blackButton">Add to Cart</button>
+              <button
+                className="blackButton"
+                onClick={() => {
+                  if (token) {
+                    dispatch(addToCart(response?.data?.courseDetails))
+                  } else {
+                    setConfirmationModal({
+                      text1: "You are not logged in!",
+                      text2: "Please login to add to cart.",
+                      btn1Text: "Login",
+                      btn2Text: "Cancel",
+                      btn1Handler: () => navigate("/login"),
+                      btn2Handler: () => setConfirmationModal(null),
+                    })
+                  }
+                }}
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
           {/* Courses Card */}

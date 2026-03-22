@@ -9,7 +9,7 @@ dotenv.config()
 export const auth = async(req,res,next) => {
     try {
         // extract token
-        const token = req.cookies.token || req.body.token || req.header("Authorization").replace("Bearer ", "");
+        const token = req.header("Authorization")?.replace("Bearer ", "") || req.cookies.token || req.body.token;
         // if token is missing then return response
         if(!token){
             return res.status(401).json({
@@ -25,18 +25,20 @@ export const auth = async(req,res,next) => {
             req.user = decode;
         } catch (error) {
             // verification - issue 
+            console.error("JWT Verification Error:", error.message);
             return res.status(401).json({
                  success:false,
-            message:"Token is invalid",
+            message:"Token is invalid: " + error.message,
             })
            
         }
         next();
 
     } catch (error) {
+        console.error("Outer Auth Catch Error:", error.message);
         return res.status(401).json({
             success:false,
-            message:'Something went wrong while validateing the token '
+            message:'Something went wrong while validateing the token'
         });
     }
 }
