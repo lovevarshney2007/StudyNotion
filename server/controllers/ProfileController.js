@@ -135,7 +135,7 @@ export const getEnrolledCourses = async (req, res) => {
   try {
     const userId = req.user.id;
     const userDetails = await User.findById(userId).lean();
-    const enrolledCourseIds = userDetails?.couses || [];
+    const enrolledCourseIds = userDetails?.courses || [];
 
     const courseDetails = await Course.find({
       _id: { $in: enrolledCourseIds },

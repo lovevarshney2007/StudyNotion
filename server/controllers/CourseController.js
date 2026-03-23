@@ -99,13 +99,22 @@ export const createCourse = async (req, res) => {
       { _id: instructorDetails._id },
       {
         $push: {
-          course: newCourse._id,
+          courses: newCourse._id,
         },
       },
       { new: true }
     );
     
-    
+    // Add the new course to the Category
+    await Category.findByIdAndUpdate(
+      { _id: categoryDetails._id },
+      {
+        $push: {
+          courses: newCourse._id,
+        },
+      },
+      { new: true }
+    );
 
     // return response
 

@@ -71,10 +71,7 @@ export const categoryPageDetails = async (req, res) => {
     }
 
     if (!selectedCategory.courses || selectedCategory.courses.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No courses found for the selected category.",
-      });
+      console.log("No courses found for the selected category.");
     }
 
     const categoriesExceptSelected = await Category.find({
