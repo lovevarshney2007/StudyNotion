@@ -120,7 +120,7 @@ export const enrollStudents = async (courses, userId, res) => {
 
       const enrolledStudent = await User.findByIdAndUpdate(
         userId,
-        { $addToSet: { couses: courseId } },
+        { $addToSet: { courses: courseId } },
         { new: true }
       )
 

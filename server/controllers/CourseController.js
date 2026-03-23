@@ -151,7 +151,7 @@ export const editCourse = async (req,res) => {
     if(req.file){
       console.log("thumbnail update")
       const thumbnail = req.files.thumbanailImage
-      const thumbnailImage = uploadImageToCloudinary(
+      const thumbnailImage = await uploadImageToCloudinary(
         thumbnail,
         process.env.FOLDER_NAME
       )
@@ -179,8 +179,8 @@ export const editCourse = async (req,res) => {
         path:"additionalDetails"
       },
     })
-    .populate("category")
-    .populate("RatingAndReview")
+    .populate("Category")
+    .populate("ratingAndReview")
     .populate({
       path:"courseContent",
       populate:{
@@ -214,7 +214,7 @@ export const getAllCourse = async (req,res) => {
         price:true,
         thumbnail:true,
         instructor:true,
-        ratingAndReviews:true,
+        ratingAndReview:true,
         studentEnrolled:true
       }
     )
@@ -305,7 +305,7 @@ export const getFullCourseDetails = async (req,res) => {
   try {
     const {courseId} = req.body
     const userId = req.user.id
-    const courseDeatails = await Course.findOne({
+    const courseDetails = await Course.findOne({
       _id:courseId
     })
     .populate({
@@ -314,8 +314,8 @@ export const getFullCourseDetails = async (req,res) => {
         path:"additionalDetails",
       }
     })
-    .populate("category")
-    .populate("ratingAndReviews")
+    .populate("Category")
+    .populate("ratingAndReview")
     .populate({
       path:"courseContent",
       populate:{
@@ -413,7 +413,7 @@ export const deleteCourse = async (req,res) => {
       })
     }
 
-    const studentEnrolled = course.studentEntrolled;
+    const studentEnrolled = course.studentEnrolled;
     for(const studentId of studentEnrolled){
       await User.findByIdAndUpdate(studentId,{
         $pull:{courses:courseId},
