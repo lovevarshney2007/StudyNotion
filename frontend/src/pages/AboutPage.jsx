@@ -6,11 +6,11 @@ import BannerImage2 from "../Asset/Image/aboutus2.webp"
 import BannerImage3 from "../Asset/Image/aboutus3.webp"
 import Footer from "../component/Common/Footer"
 import ReviewSlider from "../component/Common/ReviewSlider"
-import ContactFormSection from "../component/Core/AboutPage/ContactFormSection"
-import LearningGrid from "../component/Core/AboutPage/LearningGrid"
-import Quote from "../component/Core/AboutPage/Quote"
-import StatsComponenet from "../component/Core/AboutPage/Stats"
-import HighlightText from "../component/Core/HomePage/HighlightText"
+import ContactFormSection from "../component/core/AboutPage/ContactFormSection"
+import LearningGrid from "../component/core/AboutPage/LearningGrid"
+import Quote from "../component/core/AboutPage/Quote"
+import StatsComponenet from "../component/core/AboutPage/Stats"
+import HighlightText from "../component/core/HomePage/HighlightText"
 
 const About = () => {
   return (
