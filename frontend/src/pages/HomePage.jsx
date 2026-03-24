@@ -15,6 +15,7 @@ import InstructorSection from "../component/core/HomePage/InstructorSection"
 import LearningLanguageSection from "../component/core/HomePage/LearningLanguageSection"
 import TimelineSection from "../component/core/HomePage/TimeLineSection"
 
+
 function Home() {
   return (
     <div>
