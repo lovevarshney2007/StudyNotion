@@ -28,7 +28,7 @@ import Cart from "./component/core/Dashboard/Cart"
 import PurchaseHistory from "./component/core/Dashboard/PurchaseHistory.jsx" // Added import
 import { ACCOUNT_TYPE } from "./utils/constants"
 import AddCourse from "./component/core/Dashboard/AddCourse"
-import MyCourses from "./component/core/Dashboard/MyCourses"
+import MyCourses from "./component/core/Dashboard/Mycourses"
 import EditCourse from "./component/core/Dashboard/EditCourse"
 import ViewCourse from "./pages/ViewCoursePage.jsx"
 import VideoDetails from "./component/core/ViewCourse/VideoDetails"
