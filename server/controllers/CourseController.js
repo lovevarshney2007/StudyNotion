@@ -112,7 +112,7 @@ export const createCourse = async (req, res) => {
         $push: {
           courses: newCourse._id,
         },
-      },
+      }, 
       { new: true }
     );
 
