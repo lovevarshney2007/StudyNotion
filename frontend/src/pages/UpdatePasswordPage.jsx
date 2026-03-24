@@ -13,7 +13,7 @@ import ExploreMore from "../component/core/HomePage/ExploreMore"
 import HighlightText from "../component/core/HomePage/HighlightText"
 import InstructorSection from "../component/core/HomePage/InstructorSection"
 import LearningLanguageSection from "../component/core/HomePage/LearningLanguageSection"
-import TimelineSection from "../component/core/HomePage/TimelineSection"
+import TimelineSection from "../component/core/HomePage/TimeLineSection"
 
 function Home() {
   return (
