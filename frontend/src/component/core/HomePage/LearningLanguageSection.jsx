@@ -1,8 +1,8 @@
 import React from 'react'
 import HighlightText from './HighlightText'
-import know_your_progress from "../../../Asset/Image/know_your_progress.png"
+import know_your_progress from "../../../Asset/Image/Know_your_progress.png"
 import compare_with_others from '../../../Asset/Image/Compare_with_others.png'
-import plan_your_lesson from "../../../Asset/Image/know_your_progress.png"
+import plan_your_lesson from "../../../Asset/Image/Plan_your_lessons.png"
 import CTAButton from "./Button"
 
 const LearningLanguageSection = () => {
