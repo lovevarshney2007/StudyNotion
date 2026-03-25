@@ -1,194 +1,219 @@
-# StudyNotion 📚
+# StudyNotion — Ed-Tech Platform
 
-A full-stack Ed-Tech platform where **instructors** can create and publish courses and **students** can browse, purchase, and learn at their own pace. Built with the MERN stack, integrated with Cloudinary for media, Razorpay for payments, and deployed on Vercel (frontend) + Render (backend).
-
----
-
-## Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Environment Variables](#environment-variables)
-  - [Running Locally](#running-locally)
-- [API Overview](#api-overview)
-- [Deployment](#deployment)
-- [License](#license)
+A fully functional ed-tech platform built with the **MERN stack** (MongoDB, Express.js, React, Node.js).
 
 ---
 
-## Features
+## 🚀 Features
 
-### Students
-- Browse and search for courses
-- Enroll in free or paid courses via Razorpay
-- Track learning progress with a progress bar
-- Download course completion certificates
-- Write reviews for completed courses
-- Manage profile, password, and display picture
-
-### Instructors
-- Create, edit, and delete courses with rich content (videos, descriptions, sections)
-- Visual analytics dashboard (enrollment count, revenue charts)
-- Manage course sections and sub-sections
-
-### General
-- JWT-based authentication with OTP email verification
-- Password reset via email
-- Responsive UI built with Tailwind CSS
-- Dark-themed, modern design
+- **Students**: Browse courses, enroll via Razorpay, track progress, write reviews, download completion certificates
+- **Instructors**: Create/edit/delete courses with sections & videos, view dashboard analytics and detailed insights
+- **Admin**: Platform-wide stats, manage users, instructors, and courses
+- **Auth**: JWT-based auth with OTP email verification, forgot/reset password
+- **Media**: Cloudinary integration for thumbnails and video uploads
 
 ---
 
-## Tech Stack
+## 🏗️ Tech Stack
 
-| Layer      | Technology                                                                 |
-|------------|---------------------------------------------------------------------------|
-| Frontend   | React 19, Vite, Tailwind CSS v4, Redux Toolkit, React Router v7          |
-| Backend    | Node.js, Express 5, MongoDB (Mongoose)                                    |
-| Auth       | JSON Web Tokens (JWT), bcrypt, OTP via Nodemailer                         |
-| Media      | Cloudinary (image & video upload)                                         |
-| Payments   | Razorpay                                                                  |
-| Deployment | Vercel (frontend), Render (backend)                                       |
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Redux Toolkit, Tailwind CSS, Vite |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas + Mongoose |
+| Auth | JWT + Bcrypt |
+| Payments | Razorpay |
+| Media | Cloudinary |
+| Email | Nodemailer |
+| Testing | Node built-in test runner (backend), Vitest (frontend) |
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 StudyNotion/
-├── frontend/               # React + Vite application
-│   ├── src/
-│   │   ├── Asset/          # Static images, logos, timeline icons
-│   │   ├── component/      # Reusable and page-specific components
-│   │   │   ├── common/     # Navbar, Footer, Modals, etc.
-│   │   │   └── core/       # Feature components (Auth, Dashboard, Course, HomePage…)
-│   │   ├── data/           # Static data files (nav links, sidebar links, etc.)
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── pages/          # Route-level page components
-│   │   ├── reducer/        # Redux root reducer
-│   │   ├── services/       # API connector, service functions, operations
-│   │   ├── slices/         # Redux slices (auth, cart, course, profile, viewCourse)
-│   │   └── utils/          # Utility functions (avgRating, constants, formatter)
-│   ├── .env
-│   └── vite.config.js
-│
-├── server/                 # Express REST API
-│   ├── config/             # Database and Cloudinary config
-│   ├── controllers/        # Route handler logic
-│   ├── middlewares/        # Auth middleware
-│   ├── models/             # Mongoose schemas
-│   ├── routes/             # Express routers
-│   ├── utils/              # Mail sender, image uploader helpers
-│   ├── .env
-│   └── index.js            # App entry point
-│
-└── package.json            # Root monorepo scripts (runs both client & server)
+├── server/              # Node.js + Express backend
+│   ├── controllers/     # Route handlers
+│   ├── models/          # Mongoose schemas
+│   ├── routes/          # Express routers
+│   ├── middlewares/     # JWT auth middleware
+│   ├── utils/           # Cloudinary, mail, duration helpers
+│   ├── mail/templates/  # Email HTML templates
+│   ├── config/          # DB, Cloudinary, Razorpay config
+│   └── tests/           # Backend integration tests
+└── frontend/            # React + Vite frontend
+    └── src/
+        ├── pages/       # Route-level pages
+        ├── component/   # Reusable components
+        ├── services/    # API service functions
+        ├── slices/      # Redux state slices
+        └── tests/       # Frontend unit tests
 ```
 
 ---
 
-## Getting Started
+## ⚙️ Environment Variables
 
-### Prerequisites
+### Backend — `server/.env`
 
-- **Node.js** v18+
-- **npm** v9+
-- A **MongoDB** database (MongoDB Atlas recommended)
-- A **Cloudinary** account
-- A **Razorpay** account (for payment integration)
-- An email account (Gmail) for OTP/nodemailer
-
-### Installation
-
-```bash
-# Clone the repo
-git clone https://github.com/<your-username>/StudyNotion.git
-cd StudyNotion
-
-# Install root dependencies
-npm install
-
-# Install frontend dependencies
-cd frontend && npm install && cd ..
-
-# Install backend dependencies
-cd server && npm install && cd ..
-```
-
-### Environment Variables
-
-**`server/.env`**
 ```env
 PORT=4000
-MONGODB_URI=your_mongodb_connection_string
+MONGODB_URL=mongodb+srv://<user>:<password>@cluster.mongodb.net/studynotion
+JWT_SECRET=your_jwt_secret_here
 
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRE=24h
+# Cloudinary
+CLOUD_NAME=your_cloudinary_cloud_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_api_secret
+FOLDER_NAME=StudyNotion
 
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-
+# Nodemailer (Gmail)
 MAIL_HOST=smtp.gmail.com
 MAIL_USER=your_email@gmail.com
-MAIL_PASS=your_email_app_password
+MAIL_PASS=your_gmail_app_password
 
-RAZORPAY_KEY=your_razorpay_key_id
-RAZORPAY_SECRET=your_razorpay_key_secret
+# Razorpay
+RAZORPAY_KEY=rzp_test_xxxxxxxxxxxx
+RAZORPAY_SECRET=your_razorpay_secret
 ```
 
-**`frontend/.env`**
+### Frontend — `frontend/.env`
+
 ```env
-VITE_BASE_URL=http://localhost:4000/api/v1
+VITE_APP_BASE_URL=http://localhost:4000
+VITE_RAZORPAY_KEY=rzp_test_xxxxxxxxxxxx
 ```
 
-### Running Locally
+---
 
-Run both the frontend and backend concurrently from the root directory:
+## 🛠️ Local Development
+
+### Prerequisites
+- Node.js >= 18
+- MongoDB Atlas account
+- Cloudinary account
+- Razorpay test account
+
+### 1. Clone & Install
 
 ```bash
-npm run dev
+git clone https://github.com/youruser/StudyNotion.git
+
+# Backend
+cd StudyNotion/server
+npm install
+
+# Frontend
+cd ../frontend
+npm install
 ```
 
-Or run them individually:
+### 2. Set up environment files
+Copy the env templates above into `server/.env` and `frontend/.env`.
+
+### 3. Run the servers
 
 ```bash
-# Backend (http://localhost:4000)
-npm run server
+# In /server
+npm run dev        # Starts on http://localhost:4000
 
-# Frontend (http://localhost:5173)
-npm run client
+# In /frontend
+npm run dev        # Starts on http://localhost:5173
 ```
 
 ---
 
-## API Overview
+## 🧪 Testing
 
-| Resource     | Base Route             | Key Operations                              |
-|--------------|------------------------|---------------------------------------------|
-| Auth         | `/api/v1/auth`         | signup, login, sendOtp, resetPassword       |
-| Profile      | `/api/v1/profile`      | getProfile, updateProfile, updatePicture    |
-| Courses      | `/api/v1/course`       | CRUD courses, sections, sub-sections        |
-| Payments     | `/api/v1/payment`      | capturePayment, verifyPayment               |
-| Contact      | `/api/v1/contact`      | contactUs                                   |
+### Backend
 
----
+```bash
+cd server
+npm test
+# Uses Node.js built-in test runner — no extra dependencies needed
+# Set TEST_BASE_URL=http://localhost:4000 if needed
+```
 
-## Deployment
+### Frontend
 
-| Service  | Platform | Notes                                               |
-|----------|----------|-----------------------------------------------------|
-| Frontend | Vercel   | Set `VITE_BASE_URL` environment variable            |
-| Backend  | Render   | Set all `server/.env` variables in Render dashboard |
-
-> **Note:** Vercel builds run in a case-sensitive Linux environment. All import paths in the source code have been verified to match the exact filesystem casing.
+```bash
+cd frontend
+npm test          # Run all tests once
+npm run test:watch  # Watch mode
+```
 
 ---
 
-## License
+## 🌐 API Reference
 
-This project is for educational purposes.
+Base URL: `http://localhost:4000/api/v1`
+
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/auth/signup` | Register a new user |
+| POST | `/auth/login` | Login & get JWT |
+| POST | `/auth/verifyOTP` | Verify email OTP |
+| POST | `/auth/reset-password-token` | Send forgot-password email |
+| POST | `/auth/reset-password` | Reset password with token |
+
+### Courses
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/course/getAllCourses` | Get all published courses |
+| POST | `/course/getCourseDetails` | Get single course details |
+| POST | `/course/createCourse` | Create course (Instructor) |
+| POST | `/course/editCourse` | Edit course (Instructor) |
+| DELETE | `/course/deleteCourse` | Delete course (Instructor) |
+| POST | `/course/createRating` | Rate a course (Student) |
+
+### Payments
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/payment/capturePayment` | Initiate Razorpay order |
+| POST | `/payment/verifyPayment` | Verify & enroll student |
+| POST | `/payment/sendPaymentSuccessEmail` | Send confirmation email |
+
+### Admin
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/admin/stats` | Platform-wide statistics |
+| GET | `/admin/users` | All registered users |
+| GET | `/admin/instructors` | All instructors |
+| GET | `/admin/courses` | All courses |
+| PATCH | `/admin/user/:id/toggle-status` | Activate/Deactivate user |
+| DELETE | `/admin/course/:id` | Delete any course |
+
+---
+
+## 🚀 Deployment
+
+| Service | Platform |
+|---|---|
+| Frontend | [Vercel](https://vercel.com) |
+| Backend | [Render](https://render.com) or [Railway](https://railway.app) |
+| Database | [MongoDB Atlas](https://cloud.mongodb.com) |
+| Media | [Cloudinary](https://cloudinary.com) |
+
+### Vercel (Frontend)
+1. Import the repo on Vercel
+2. Set **Root Directory** to `frontend`
+3. Add all `VITE_*` env vars in Vercel dashboard
+
+### Render (Backend)
+1. Create a new **Web Service**
+2. Set **Root Directory** to `server`
+3. Build command: `npm install`
+4. Start command: `npm start`
+5. Add all backend env vars
+
+---
+
+## 📋 Future Enhancements
+
+1. **Admin Panel** — currently built as read-only stats + user/course management. A future iteration can add instructor approval workflows.
+2. **Live Classes** — integrate WebRTC or Zoom SDK
+3. **AI Recommendations** — personalized course suggestions based on learning history
+4. **Discussion Forums** — per-course Q&A threads
+5. **Mobile App** — React Native companion app

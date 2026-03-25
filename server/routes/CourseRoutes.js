@@ -27,7 +27,7 @@ router.post("/updateSection", auth, isInstructor, updateSection);
 router.post("/deleteSection", auth, isInstructor, deleteSection);
 
 router.post("/updateSubSection", auth, isInstructor, updateSubSection)
-router.post("/deleteSubSection", auth, isAdmin, deleteSubSection);
+router.post("/deleteSubSection", auth, isInstructor, deleteSubSection);
 router.post("/addSubSection", auth, isInstructor, createSubSection)
 
 router.post("/createRating", auth, isStudent, createRating);

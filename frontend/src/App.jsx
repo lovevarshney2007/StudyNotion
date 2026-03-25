@@ -33,6 +33,11 @@ import EditCourse from "./component/core/Dashboard/EditCourse"
 import ViewCourse from "./pages/ViewCoursePage.jsx"
 import VideoDetails from "./component/core/ViewCourse/VideoDetails"
 import Instructor from "./component/core/Dashboard/InstructorDashboard/Instructor"
+import InstructorInsights from "./component/core/Dashboard/InstructorDashboard/InstructorInsights"
+import AdminDashboard from "./component/core/Dashboard/Admin/AdminDashboard"
+import AdminUserManagement from "./component/core/Dashboard/Admin/AdminUserManagement"
+import AdminInstructorManagement from "./component/core/Dashboard/Admin/AdminInstructorManagement"
+import AdminCourseManagement from "./component/core/Dashboard/Admin/AdminCourseManagement"
 
 function App() {
   const { user } = useSelector((state) => state.profile)
@@ -111,16 +116,26 @@ function App() {
             <>
               <Route path="cart" element={<Cart />} />
               <Route path="enrolled-courses" element={<EnrolledCourses />} />
-              <Route path="purchase-history" element={<PurchaseHistory />} /> {/* Added route */}
+              <Route path="purchase-history" element={<PurchaseHistory />} />
             </>
           )}
 
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
               <Route path="instructor" element={<Instructor />} />
+              <Route path="instructor-insights" element={<InstructorInsights />} />
               <Route path="add-course" element={<AddCourse />} />
               <Route path="my-courses" element={<MyCourses />} />
               <Route path="edit-course/:courseId" element={<EditCourse />} />
+            </>
+          )}
+
+          {user?.accountType === ACCOUNT_TYPE.ADMIN && (
+            <>
+              <Route path="admin" element={<AdminDashboard />} />
+              <Route path="admin-users" element={<AdminUserManagement />} />
+              <Route path="admin-instructors" element={<AdminInstructorManagement />} />
+              <Route path="admin-courses" element={<AdminCourseManagement />} />
             </>
           )}
         </Route>

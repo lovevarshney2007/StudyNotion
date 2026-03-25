@@ -10,6 +10,7 @@ import profileRoutes from "./routes/ProfileRoutes.js"
 import courseRoutes from "./routes/CourseRoutes.js"
 import paymentRoutes from "./routes/PaymentRoutes.js"
 import contactRoutes from "./routes/ContactRoutes.js"
+import adminRoutes from "./routes/AdminRoutes.js"
 
 import fileUpload from "express-fileupload";
 
@@ -33,6 +34,7 @@ app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/course", courseRoutes)
 app.use("/api/v1/payment", paymentRoutes)
 app.use("/api/v1/reach", contactRoutes)
+app.use("/api/v1/admin", adminRoutes)
 
 const PORT = process.env.PORT || 4000;
 

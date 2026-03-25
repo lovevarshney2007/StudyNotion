@@ -57,7 +57,11 @@ const userSchema = new mongoose.Schema({
             ref:"CourseProgress",
         }
     ],
-});
+    active: {
+        type: Boolean,
+        default: true,
+    },
+}, { timestamps: true });
 
 const User = mongoose.model("User",userSchema)
 export default User;

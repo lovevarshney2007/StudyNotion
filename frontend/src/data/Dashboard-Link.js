@@ -29,6 +29,13 @@ export const sidebarLinks = [
     icon: "VscAdd",
   },
   {
+    id: 9,
+    name: "Insights",
+    path: "/dashboard/instructor-insights",
+    type: ACCOUNT_TYPE.INSTRUCTOR,
+    icon: "VscGraph",
+  },
+  {
     id: 5,
     name: "Enrolled Courses",
     path: "/dashboard/enrolled-courses",
@@ -49,4 +56,34 @@ export const sidebarLinks = [
     type: ACCOUNT_TYPE.STUDENT,
     icon: "VscHistory",
   },
+  // Admin links
+  {
+    id: 10,
+    name: "Admin Dashboard",
+    path: "/dashboard/admin",
+    type: ACCOUNT_TYPE.ADMIN,
+    icon: "VscServer",
+  },
+  {
+    id: 11,
+    name: "Manage Users",
+    path: "/dashboard/admin-users",
+    type: ACCOUNT_TYPE.ADMIN,
+    icon: "VscPerson",
+  },
+  {
+    id: 12,
+    name: "Manage Instructors",
+    path: "/dashboard/admin-instructors",
+    type: ACCOUNT_TYPE.ADMIN,
+    icon: "VscOrganization",
+  },
+  {
+    id: 13,
+    name: "Manage Courses",
+    path: "/dashboard/admin-courses",
+    type: ACCOUNT_TYPE.ADMIN,
+    icon: "VscBook",
+  },
 ]
+
