@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getPlatformStats } from '../../../services/operations/adminAPI'
+import { getPlatformStats } from '../../../../services/operations/adminAPI'
 import { Doughnut, Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,

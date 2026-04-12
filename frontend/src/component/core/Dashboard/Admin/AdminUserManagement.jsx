@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getAllUsers, toggleUserStatus } from '../../../services/operations/adminAPI'
+import { getAllUsers, toggleUserStatus } from '../../../../services/operations/adminAPI'
 import { FiUserCheck, FiUserX, FiSearch } from 'react-icons/fi'
 
 export default function AdminUserManagement() {

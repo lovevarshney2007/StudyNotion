@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getAllInstructors } from '../../../services/operations/adminAPI'
+import { getAllInstructors } from '../../../../services/operations/adminAPI'
 import { FiSearch } from 'react-icons/fi'
 
 export default function AdminInstructorManagement() {

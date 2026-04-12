@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { getAllCoursesAdmin, deleteCourseAdmin } from '../../../services/operations/adminAPI'
+import { getAllCoursesAdmin, deleteCourseAdmin } from '../../../../services/operations/adminAPI'
 import { FiSearch, FiTrash2 } from 'react-icons/fi'
 
 export default function AdminCourseManagement() {
