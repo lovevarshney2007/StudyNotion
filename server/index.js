@@ -13,8 +13,15 @@ import contactRoutes from "./routes/ContactRoutes.js"
 import adminRoutes from "./routes/AdminRoutes.js"
 
 import fileUpload from "express-fileupload";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, ".env") });
+dotenv.config(); // fallback to current working directory or cloud provider env
+
 connectDb();
 connectCloudinary();
 
