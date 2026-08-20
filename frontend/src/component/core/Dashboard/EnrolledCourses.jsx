@@ -74,9 +74,13 @@ export default function EnrolledCourses() {
                 }}
               >
                 <img
-                  src={course.thumbnail}
+                  src={course.thumbnail || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60"}
                   alt="course_img"
                   className="h-14 w-14 rounded-lg object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60";
+                  }}
                 />
                 <div className="flex max-w-xs flex-col gap-2">
                   <p className="font-semibold">{course.courseName}</p>

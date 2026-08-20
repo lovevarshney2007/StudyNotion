@@ -22,9 +22,13 @@ const Course_Card = ({course, Height}) => {
         <div className="">
           <div className="rounded-lg">
             <img
-              src={course?.thumbnail}
+              src={course?.thumbnail || "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60"}
               alt="course thumnail"
               className={`${Height} w-full rounded-xl object-cover `}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=60";
+              }}
             />
           </div>
           <div className="flex flex-col gap-2 px-1 py-3">
