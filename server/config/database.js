@@ -1,14 +1,19 @@
 import mongoose from "mongoose"
 
 
-const connectDb = () =>  {
-    mongoose.connect(process.env.MONGODB_URL)
+const connectDb = () => {
+  const url = process.env.MONGODB_URL;
+  if (!url) {
+    console.error("MONGODB_URL environment variable is not defined!");
+    return;
+  }
+
+  mongoose
+    .connect(url)
     .then(() => console.log("Db connected successfully"))
     .catch((error) => {
-        console.log("DB connection failed");
-        console.error(error);
-        process.exit(1);
-    })
-}
+      console.error("DB connection failed:", error.message || error);
+    });
+};
 
 export default connectDb;
