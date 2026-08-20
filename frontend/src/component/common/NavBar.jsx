@@ -73,7 +73,14 @@ const NavBar = () => {
             {NavbarLinks.map((link, index) => (
               <li key={index}>
                 {link.title === "Catalog" ? (
-                  <div className='relative flex items-center gap-1 group cursor-pointer'>
+                  <div 
+                    className='relative flex items-center gap-1 group cursor-pointer'
+                    onMouseEnter={() => {
+                      if (!subLinks?.length && !loading) {
+                        fetchSubLinks()
+                      }
+                    }}
+                  >
                     <p className={isCatalogActive ? "text-yellow-25" : "text-richblack-25"}>
                       {link.title}
                     </p>
@@ -92,19 +99,24 @@ const NavBar = () => {
                       <div className='absolute left-[50%] top-0 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-sm bg-richblack-5' />
 
                       {loading ? (
-                        <p className='text-sm text-richblack-400 py-2'>Loading...</p>
-                      ) : subLinks?.length ? (
+                        <p className='text-sm text-richblack-400 py-2 text-center animate-pulse'>Loading categories...</p>
+                      ) : subLinks?.length > 0 ? (
                         subLinks.map((subLink, i) => (
                           <Link
                             to={`/catalog/${subLink.name?.toLowerCase().replace(/\s+/g, '-')}`}
                             key={i}
-                            className='py-2 px-3 text-sm rounded hover:bg-richblack-50 transition-colors duration-150 capitalize'
+                            className='py-2 px-3 text-sm rounded hover:bg-richblack-50 transition-colors duration-150 capitalize font-medium text-richblack-800'
                           >
                             {subLink.name}
                           </Link>
                         ))
                       ) : (
-                        <p className='text-sm text-richblack-400 py-2'>No categories found</p>
+                        <button
+                          onClick={fetchSubLinks}
+                          className='text-sm text-yellow-500 py-2 hover:underline text-center'
+                        >
+                          Retry loading categories
+                        </button>
                       )}
                     </div>
                   </div>
