@@ -36,12 +36,13 @@ const VideoDetails = () => {
           (course) => course._id === sectionId
         )
         // console.log("filteredData", filteredData)
-        const filteredVideoData = filteredData?.[0]?.subSection.filter(
+        const filteredVideoData = filteredData?.[0]?.subSection?.filter(
           (data) => data._id === subSectionId
         )
-        // console.log("filteredVideoData", filteredVideoData)
-        setVideoData(filteredVideoData[0])
-        setPreviewSource(courseEntireData.thumbnail)
+        if (filteredVideoData && filteredVideoData.length > 0) {
+          setVideoData(filteredVideoData[0])
+        }
+        setPreviewSource(courseEntireData?.thumbnail || "")
         setVideoEnded(false)
       }
     })()

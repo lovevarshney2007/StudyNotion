@@ -62,9 +62,15 @@ export default function EnrolledCourses() {
               <div
                 className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3"
                 onClick={() => {
-                  navigate(
-                    `/view-course/${course?._id}/section/${course.courseContent?.[0]?._id}/sub-section/${course.courseContent?.[0]?.subSection?.[0]?._id}`
-                  )
+                  const firstSection = course.courseContent?.[0];
+                  const firstSubSection = firstSection?.subSection?.[0];
+                  if (firstSection?._id && firstSubSection?._id) {
+                    navigate(
+                      `/view-course/${course?._id}/section/${firstSection._id}/sub-section/${firstSubSection._id}`
+                    );
+                  } else {
+                    navigate(`/courses/${course?._id}`);
+                  }
                 }}
               >
                 <img

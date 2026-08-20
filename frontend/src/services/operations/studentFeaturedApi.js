@@ -47,7 +47,7 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
     }
 
     const options = {
-      key: import.meta.env.VITE_APP_RAZORPAY_KEY,
+      key: import.meta.env.VITE_APP_RAZORPAY_KEY || import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_placeholder",
       currency: orderResponse.data.data.currency,
       amount: `${orderResponse.data.data.amount}`,
       order_id: orderResponse.data.data.id,

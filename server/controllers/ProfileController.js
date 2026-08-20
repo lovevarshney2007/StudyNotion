@@ -1,40 +1,32 @@
 import Course from "../models/CourseModel.js";
 import Profile from "../models/ProfileModel.js";
 import User from "../models/UserModel.js";
+import CourseProgress from "../models/CourseProgressModel.js";
 import uploadImageToCloudinary from "../utils/imageUploader.js";
+import convertSecondsToDuration from "../utils/SecToDuration.js";
+import mongoose from "mongoose";
 
-export const updatePofile = async (req, res) => {
+// update Profile 
+export const updateProfile = async (req, res) => {
   try {
-    const { firstName = "", lastName = "", dateOfBirth = "", about = "", contactNumber, gender } = req.body;
+    const { dateOfBirth = "", about = "", contactNumber = "", gender = "" } = req.body;
     const id = req.user.id;
 
-    if (!contactNumber || !gender || !id) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
-
+    // find profile 
     const userDetails = await User.findById(id);
     const profileId = userDetails.additionalDetails;
     const profileDetails = await Profile.findById(profileId);
 
-    profileDetails.dateOfBirth = dateOfBirth ? new Date(dateOfBirth) : null;
-    profileDetails.about = about;
-    profileDetails.gender = gender;
-    profileDetails.contactNumber = contactNumber;
+    // update profile 
+    if (profileDetails) {
+      if (dateOfBirth) profileDetails.dateOfBirth = dateOfBirth;
+      if (about) profileDetails.about = about;
+      if (gender) profileDetails.gender = gender;
+      if (contactNumber) profileDetails.contactNumber = contactNumber;
+      await profileDetails.save();
+    }
 
-    await profileDetails.save();
-
-    // Update user first/last name
-    await User.findByIdAndUpdate(id, {
-      firstName,
-      lastName,
-    });
-
-    const updatedUserDetails = await User.findById(id)
-      .populate("additionalDetails")
-      .exec();
+    const updatedUserDetails = await User.findById(id).populate("additionalDetails");
 
     return res.status(200).json({
       success: true,
@@ -42,42 +34,61 @@ export const updatePofile = async (req, res) => {
       updatedUserDetails,
     });
   } catch (error) {
+    console.error("Update profile error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal server error in profileController",
+      message: "Error in updating Profile",
       error: error.message,
     });
   }
 };
 
+// Export alias for backward compatibility
+export const updatePofile = updateProfile;
+
+// delete Account 
 export const deleteAccount = async (req, res) => {
   try {
     const id = req.user.id;
-    const userDetails = await User.findById(id);
 
+    const userDetails = await User.findById(id);
     if (!userDetails) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
 
-    await Profile.findByIdAndDelete({ _id: userDetails.additionalDetails });
-    await User.findByIdAndDelete({ _id: id });
+    // delete profile 
+    await Profile.findByIdAndDelete(userDetails.additionalDetails);
+
+    // Unenroll user from all enrolled courses
+    await Course.updateMany(
+      { _id: { $in: userDetails.courses } },
+      { $pull: { studentEnrolled: id } }
+    );
+
+    // Delete course progress records
+    await CourseProgress.deleteMany({ userId: id });
+
+    // delete user
+    await User.findByIdAndDelete(id);
 
     return res.status(200).json({
       success: true,
-      message: "User deleted successfully",
+      message: "User Deleted Successfully",
     });
   } catch (error) {
-    console.error(error);
+    console.error("Delete account error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error while deleteing account ",
+      message: "User cannot be deleted",
+      error: error.message,
     });
   }
 };
 
+// get all User Details 
 export const getAllUserDetails = async (req, res) => {
   try {
     const id = req.user.id;
@@ -92,6 +103,7 @@ export const getAllUserDetails = async (req, res) => {
       data: userDetails,
     });
   } catch (error) {
+    console.error("Get user details error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -99,10 +111,18 @@ export const getAllUserDetails = async (req, res) => {
   }
 };
 
+// updateDisplayPicture
 export const updateDisplayPicture = async (req, res) => {
   try {
-    const displayPicture = req.files.displayPicture;
+    const displayPicture = req.files?.displayPicture;
     const userId = req.user.id;
+
+    if (!displayPicture) {
+      return res.status(400).json({
+        success: false,
+        message: "Display picture is required",
+      });
+    }
 
     const image = await uploadImageToCloudinary(
       displayPicture,
@@ -119,11 +139,11 @@ export const updateDisplayPicture = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Image successfully updated",
+      message: `Image Updated successfully`,
       data: updatedProfile,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Update display picture error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -131,63 +151,114 @@ export const updateDisplayPicture = async (req, res) => {
   }
 };
 
+// getEnrolledCourses
 export const getEnrolledCourses = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userDetails = await User.findById(userId).lean();
-    const enrolledCourseIds = userDetails?.courses || [];
-
-    const courseDetails = await Course.find({
-      _id: { $in: enrolledCourseIds },
+    let userDetails = await User.findOne({
+      _id: userId,
     })
       .populate({
-        path: "courseContent",
+        path: "courses",
         populate: {
-          path: "subSection",
+          path: "courseContent",
+          populate: {
+            path: "subSection",
+          },
         },
       })
       .exec();
 
+    if (!userDetails) {
+      return res.status(404).json({
+        success: false,
+        message: `Could not find user with id: ${userId}`,
+      });
+    }
+
+    const enrolledCourses = [];
+    const courses = userDetails.courses || [];
+
+    for (let i = 0; i < courses.length; i++) {
+      const course = courses[i];
+      let totalDurationInSeconds = 0;
+      let totalSubsections = 0;
+
+      const contents = course.courseContent || [];
+      for (let j = 0; j < contents.length; j++) {
+        const subSections = contents[j].subSection || [];
+        totalSubsections += subSections.length;
+        for (let k = 0; k < subSections.length; k++) {
+          totalDurationInSeconds += parseInt(subSections[k].timeDuration) || 0;
+        }
+      }
+
+      const courseProgress = await CourseProgress.findOne({
+        courseId: course._id,
+        userId: userId,
+      });
+
+      const completedCount = courseProgress?.completedVideos?.length || 0;
+      let progressPercentage = 0;
+      if (totalSubsections === 0) {
+        progressPercentage = 100;
+      } else {
+        const multiplier = Math.pow(10, 2);
+        progressPercentage =
+          Math.round((completedCount / totalSubsections) * 100 * multiplier) /
+          multiplier;
+      }
+
+      enrolledCourses.push({
+        ...course.toObject(),
+        totalDuration: convertSecondsToDuration(totalDurationInSeconds),
+        progressPercentage,
+      });
+    }
+
     return res.status(200).json({
       success: true,
-      data: courseDetails,
+      data: enrolledCourses,
     });
   } catch (error) {
+    console.error("Get enrolled courses error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
-    })
+    });
   }
 };
 
+// instructorDashboard
 export const instructorDashboard = async (req, res) => {
   try {
-    const courseDetails = await Course.find({
-      instructor: req.user.id,
-    });
+    const courseDetails = await Course.find({ instructor: req.user.id });
 
-    const courses = courseDetails.map((course) => {
-      const totalStudentEnrolled = course.studentEnrolled.length;
-      const totalAmountGenerated = totalStudentEnrolled * (course.price || 0);
+    const courseData = courseDetails.map((course) => {
+      const totalStudentsEnrolled = course.studentEnrolled?.length || 0;
+      const totalAmountGenerated = totalStudentsEnrolled * (course.price || 0);
 
-      return {
+      const courseDataWithStats = {
         _id: course._id,
         courseName: course.courseName,
         courseDescription: course.courseDescription,
-        totalStudentEnrolled,
+        totalStudentsEnrolled,
         totalAmountGenerated,
       };
+
+      return courseDataWithStats;
     });
 
     return res.status(200).json({
       success: true,
-      courses,
-    })
+      courses: courseData,
+      data: courseData,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Instructor dashboard error:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server error in instrucor dashboard ",
-    })
+      message: "Internal Server Error",
+    });
   }
-}
+};

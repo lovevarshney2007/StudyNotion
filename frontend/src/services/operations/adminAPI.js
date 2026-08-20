@@ -1,15 +1,16 @@
 import { apiConnector } from "../apiConnector";
 import { toast } from "react-hot-toast";
 
-const BASE = import.meta.env.VITE_APP_BASE_URL || "http://localhost:4000";
+const rawBase = import.meta.env.VITE_APP_BASE_URL || "http://localhost:4000/api/v1";
+const BASE = rawBase.endsWith("/api/v1") ? rawBase : `${rawBase}/api/v1`;
 
 const ADMIN_API = {
-  GET_STATS: `${BASE}/api/v1/admin/stats`,
-  GET_ALL_USERS: `${BASE}/api/v1/admin/users`,
-  GET_ALL_INSTRUCTORS: `${BASE}/api/v1/admin/instructors`,
-  GET_ALL_COURSES: `${BASE}/api/v1/admin/courses`,
-  TOGGLE_USER_STATUS: (userId) => `${BASE}/api/v1/admin/user/${userId}/toggle-status`,
-  DELETE_COURSE: (courseId) => `${BASE}/api/v1/admin/course/${courseId}`,
+  GET_STATS: `${BASE}/admin/stats`,
+  GET_ALL_USERS: `${BASE}/admin/users`,
+  GET_ALL_INSTRUCTORS: `${BASE}/admin/instructors`,
+  GET_ALL_COURSES: `${BASE}/admin/courses`,
+  TOGGLE_USER_STATUS: (userId) => `${BASE}/admin/user/${userId}/toggle-status`,
+  DELETE_COURSE: (courseId) => `${BASE}/admin/course/${courseId}`,
 };
 
 export const getPlatformStats = async (token) => {

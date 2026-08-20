@@ -50,32 +50,32 @@ function CourseDetails() {
   // Calculating Avg Review count
   const [avgReviewCount, setAvgReviewCount] = useState(0)
   useEffect(() => {
-    const count = GetAvgRating(response?.data?.courseDetails.ratingAndReviews)
+    const reviews =
+      response?.data?.courseDetails?.ratingAndReviews ||
+      response?.data?.courseDetails?.ratingAndReview ||
+      []
+    const count = GetAvgRating(reviews)
     setAvgReviewCount(count)
   }, [response])
-  // console.log("avgReviewCount: ", avgReviewCount)
-
-  // // Collapse all
-  // const [collapse, setCollapse] = useState("")
-  const [isActive, setIsActive] = useState(Array(0))
-  const handleActive = (id) => {
-    // console.log("called", id)
-    setIsActive(
-      !isActive.includes(id)
-        ? isActive.concat([id])
-        : isActive.filter((e) => e != id)
-    )
-  }
 
   // Total number of lectures
   const [totalNoOfLectures, setTotalNoOfLectures] = useState(0)
   useEffect(() => {
     let lectures = 0
     response?.data?.courseDetails?.courseContent?.forEach((sec) => {
-      lectures += sec.subSection.length || 0
+      lectures += sec.subSection?.length || 0
     })
     setTotalNoOfLectures(lectures)
   }, [response])
+
+  const [isActive, setIsActive] = useState([])
+  const handleActive = (id) => {
+    setIsActive(
+      !isActive.includes(id)
+        ? isActive.concat([id])
+        : isActive.filter((e) => e !== id)
+    )
+  }
 
   if (loading || !response) {
     return (
@@ -88,6 +88,7 @@ function CourseDetails() {
     return <Error />
   }
 
+  const courseDetails = response.data?.courseDetails || {}
   const {
     _id: course_id,
     courseName,
@@ -95,12 +96,12 @@ function CourseDetails() {
     thumbnail,
     price,
     whatYouWillLearn,
-    courseContent,
-    ratingAndReviews,
-    instructor,
-    studentsEnrolled,
+    courseContent = [],
+    ratingAndReviews = courseDetails.ratingAndReview || [],
+    instructor = {},
+    studentsEnrolled = courseDetails.studentEnrolled || [],
     createdAt,
-  } = response.data?.courseDetails
+  } = courseDetails
 
   const handleBuyCourse = () => {
     if (token) {
@@ -152,12 +153,12 @@ function CourseDetails() {
               <div className="text-md flex flex-wrap items-center gap-2">
                 <span className="text-yellow-25">{avgReviewCount}</span>
                 <RatingStars Review_Count={avgReviewCount} Star_Size={24} />
-                <span>{`(${ratingAndReviews.length} reviews)`}</span>
-                <span>{`${studentsEnrolled.length} students enrolled`}</span>
+                <span>{`(${ratingAndReviews?.length || 0} reviews)`}</span>
+                <span>{`${studentsEnrolled?.length || 0} students enrolled`}</span>
               </div>
               <div>
                 <p className="">
-                  Created By {`${instructor.firstName} ${instructor.lastName}`}
+                  Created By {`${instructor?.firstName || "StudyNotion"} ${instructor?.lastName || "Instructor"}`}
                 </p>
               </div>
               <div className="flex flex-wrap gap-5 text-lg">

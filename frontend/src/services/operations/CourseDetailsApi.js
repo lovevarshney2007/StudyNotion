@@ -141,7 +141,7 @@ export const createSection = async (data, token) => {
       throw new Error("Could Not Create Section")
     }
     toast.success("Course Section Created")
-    result = response?.data?.updatedCourse
+    result = response?.data?.updatedCourse || response?.data?.data || response?.data?.updatedCourseDetails
   } catch (error) {
     console.log("CREATE SECTION API ERROR............", error)
     toast.error(error.message)
@@ -163,7 +163,7 @@ export const createSubSection = async (data, token) => {
       throw new Error("Could Not Add Lecture")
     }
     toast.success("Lecture Added")
-    result = response?.data?.data
+    result = response?.data?.data || response?.data?.updatedSection
   } catch (error) {
     console.log("CREATE SUB-SECTION API ERROR............", error)
     toast.error(error.message)
@@ -185,7 +185,7 @@ export const updateSection = async (data, token) => {
       throw new Error("Could Not Update Section")
     }
     toast.success("Course Section Updated")
-    result = response?.data?.data
+    result = response?.data?.data || response?.data?.updatedCourse
   } catch (error) {
     console.log("UPDATE SECTION API ERROR............", error)
     toast.error(error.message)
@@ -207,7 +207,7 @@ export const updateSubSection = async (data, token) => {
       throw new Error("Could Not Update Lecture")
     }
     toast.success("Lecture Updated")
-    result = response?.data?.data
+    result = response?.data?.data || response?.data?.updatedSection
   } catch (error) {
     console.log("UPDATE SUB-SECTION API ERROR............", error)
     toast.error(error.message)
@@ -229,7 +229,7 @@ export const deleteSection = async (data, token) => {
       throw new Error("Could Not Delete Section")
     }
     toast.success("Course Section Deleted")
-    result = response?.data?.data
+    result = response?.data?.data || response?.data?.updatedCourse
   } catch (error) {
     console.log("DELETE SECTION API ERROR............", error)
     toast.error(error.message)
@@ -250,7 +250,7 @@ export const deleteSubSection = async (data, token) => {
       throw new Error("Could Not Delete Lecture")
     }
     toast.success("Lecture Deleted")
-    result = response?.data?.data
+    result = response?.data?.data || response?.data?.updatedSection
   } catch (error) {
     console.log("DELETE SUB-SECTION API ERROR............", error)
     toast.error(error.message)

@@ -43,16 +43,16 @@ export default function CourseInformationForm() {
       setLoading(false)
     }
     // if form is in edit mode
-    if (editCourse) {
+    if (editCourse && course) {
       // console.log("data populated", editCourse)
-      setValue("courseTitle", course.courseName)
-      setValue("courseShortDesc", course.courseDescription)
-      setValue("coursePrice", course.price)
-      setValue("courseTags", course.tag)
-      setValue("courseBenefits", course.whatYouWillLearn)
-      setValue("courseCategory", course.category)
-      setValue("courseRequirements", course.instructions)
-      setValue("courseImage", course.thumbnail)
+      setValue("courseTitle", course.courseName || "")
+      setValue("courseShortDesc", course.courseDescription || "")
+      setValue("coursePrice", course.price || "")
+      setValue("courseTags", course.tags || course.tag || [])
+      setValue("courseBenefits", course.whatYouWillLearn || "")
+      setValue("courseCategory", course.category?._id || course.category || "")
+      setValue("courseRequirements", course.instructions || [])
+      setValue("courseImage", course.thumbnail || "")
     }
     getCategories()
 
@@ -61,16 +61,15 @@ export default function CourseInformationForm() {
 
   const isFormUpdated = () => {
     const currentValues = getValues()
-    // console.log("changes after editing form values:", currentValues)
+    const currentCategory = course?.category?._id || course?.category || ""
     if (
       currentValues.courseTitle !== course.courseName ||
       currentValues.courseShortDesc !== course.courseDescription ||
       currentValues.coursePrice !== course.price ||
-      currentValues.courseTags.toString() !== course.tag.toString() ||
+      (currentValues.courseTags || []).toString() !== (course.tags || course.tag || []).toString() ||
       currentValues.courseBenefits !== course.whatYouWillLearn ||
-      currentValues.courseCategory._id !== course.category._id ||
-      currentValues.courseRequirements.toString() !==
-        course.instructions.toString() ||
+      currentValues.courseCategory !== currentCategory ||
+      (currentValues.courseRequirements || []).toString() !== (course.instructions || []).toString() ||
       currentValues.courseImage !== course.thumbnail
     ) {
       return true
@@ -101,18 +100,18 @@ export default function CourseInformationForm() {
         if (currentValues.coursePrice !== course.price) {
           formData.append("price", data.coursePrice)
         }
-        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+        if ((currentValues.courseTags || []).toString() !== (course.tags || course.tag || []).toString()) {
           formData.append("tag", JSON.stringify(data.courseTags))
         }
         if (currentValues.courseBenefits !== course.whatYouWillLearn) {
           formData.append("whatYouWillLearn", data.courseBenefits)
         }
-        if (currentValues.courseCategory._id !== course.category._id) {
+        if (currentValues.courseCategory !== (course.category?._id || course.category)) {
           formData.append("category", data.courseCategory)
         }
         if (
-          currentValues.courseRequirements.toString() !==
-          course.instructions.toString()
+          (currentValues.courseRequirements || []).toString() !==
+          (course.instructions || []).toString()
         ) {
           formData.append(
             "instructions",

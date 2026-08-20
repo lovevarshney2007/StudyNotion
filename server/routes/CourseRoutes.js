@@ -19,7 +19,7 @@ router.get("/getAllCourses", getAllCourse);
 router.post("/getCourseDetails", getCourseDetails)
 router.post("/getFullCourseDetails", auth, getFullCourseDetails);
 router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress);
-router.delete("/deleteCourse", deleteCourse);
+router.delete("/deleteCourse", auth, isInstructor, deleteCourse);
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses);
 
 router.post("/addSection", auth, isInstructor, createSection);

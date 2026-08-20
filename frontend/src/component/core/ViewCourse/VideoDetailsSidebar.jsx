@@ -97,7 +97,7 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
               {/* Sub Sections */}
               {activeStatus === course?._id && (
                 <div className="transition-[height] duration-500 ease-in-out">
-                  {course.subSection.map((topic, i) => (
+                  {course?.subSection?.map((topic, i) => (
                     <div
                       className={`flex gap-3  px-5 py-2 ${
                         videoBarActive === topic._id
@@ -114,10 +114,10 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
                     >
                       <input
                         type="checkbox"
-                        checked={completedLectures.includes(topic?._id)}
+                        checked={completedLectures?.includes(topic?._id) || false}
                         onChange={() => {}}
                       />
-                      {topic.title}
+                      {topic?.title}
                     </div>
                   ))}
                 </div>

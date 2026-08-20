@@ -65,23 +65,29 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse }) {
             Rs. {CurrentPrice}
           </div>
           <div className="flex flex-col gap-4">
-            <button
-              className="yellowButton"
-              onClick={
-                user && course?.studentsEnrolled.includes(user?._id)
-                  ? () => navigate("/dashboard/enrolled-courses")
-                  : handleBuyCourse
-              }
-            >
-              {user && course?.studentsEnrolled.includes(user?._id)
-                ? "Go To Course"
-                : "Buy Now"}
-            </button>
-            {(!user || !course?.studentsEnrolled.includes(user?._id)) && (
-              <button onClick={handleAddToCart} className="blackButton">
-                Add to Cart
-              </button>
-            )}
+            {(() => {
+              const enrolledList = course?.studentsEnrolled || course?.studentEnrolled || [];
+              const isEnrolled = user && enrolledList.some((id) => (typeof id === "object" ? id?._id || id : id) === user?._id);
+              return (
+                <>
+                  <button
+                    className="yellowButton"
+                    onClick={
+                      isEnrolled
+                        ? () => navigate("/dashboard/enrolled-courses")
+                        : handleBuyCourse
+                    }
+                  >
+                    {isEnrolled ? "Go To Course" : "Buy Now"}
+                  </button>
+                  {!isEnrolled && (
+                    <button onClick={handleAddToCart} className="blackButton">
+                      Add to Cart
+                    </button>
+                  )}
+                </>
+              );
+            })()}
           </div>
           <div>
             <p className="pb-3 pt-6 text-center text-sm text-richblack-25">

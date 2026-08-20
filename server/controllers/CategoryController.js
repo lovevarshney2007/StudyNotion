@@ -11,11 +11,11 @@ export const createCategory = async (req, res) => {
     if (!name || !description) {
       return res.status(400).json({
         success: false,
-        messageL: "All fields are required",
+        message: "All fields are required",
       });
     }
 
-    await Category.create({
+    const newCategory = await Category.create({
       name,
       description,
     });
@@ -23,8 +23,10 @@ export const createCategory = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Category created Successfully",
+      data: newCategory,
     });
   } catch (error) {
+    console.error("Create category error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -40,10 +42,11 @@ export const showAllCategory = async (req, res) => {
     );
     return res.status(200).json({
       success: true,
-      message: "All tags fetched Successfully",
+      message: "All categories fetched Successfully",
       data: allCategories,
     });
   } catch (error) {
+    console.error("Show all categories error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -59,7 +62,10 @@ export const categoryPageDetails = async (req, res) => {
       .populate({
         path: "courses",
         match: { status: "Published" },
-        populate: "ratingAndReview",
+        populate: [
+          { path: "ratingAndReview" },
+          { path: "instructor", select: "firstName lastName email image" }
+        ],
       })
       .exec();
 
@@ -68,10 +74,6 @@ export const categoryPageDetails = async (req, res) => {
         success: false,
         message: "Category not found",
       });
-    }
-
-    if (!selectedCategory.courses || selectedCategory.courses.length === 0) {
-      console.log("No courses found for the selected category.");
     }
 
     const categoriesExceptSelected = await Category.find({
@@ -86,6 +88,10 @@ export const categoryPageDetails = async (req, res) => {
         .populate({
           path: "courses",
           match: { status: "Published" },
+          populate: [
+            { path: "ratingAndReview" },
+            { path: "instructor", select: "firstName lastName email image" }
+          ],
         })
         .exec();
     }
@@ -94,12 +100,16 @@ export const categoryPageDetails = async (req, res) => {
       .populate({
         path: "courses",
         match: { status: "Published" },
+        populate: [
+          { path: "ratingAndReview" },
+          { path: "instructor", select: "firstName lastName email image" }
+        ],
       })
       .exec();
 
     const allCourses = allCategories.flatMap((category) => category.courses || []);
     const mostSellingCourses = allCourses
-      .sort((a, b) => (b.sold || 0) - (a.sold || 0))
+      .sort((a, b) => (b.studentEnrolled?.length || 0) - (a.studentEnrolled?.length || 0))
       .slice(0, 10);
 
     return res.status(200).json({
@@ -111,7 +121,7 @@ export const categoryPageDetails = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error("Category page details error:", error);
     return res.status(500).json({
       success: false,
       message: error.message,

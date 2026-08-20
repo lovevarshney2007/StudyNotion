@@ -1,197 +1,121 @@
-// Icons Import
-import { FaArrowRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { BiArrowBack } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
-// Image and Video Import
-import Banner from "../Asset/Image/banner.mp4"
-// Component Imports
-import Footer from "../component/common/Footer"
-import ReviewSlider from "../component/common/ReviewSlider"
-import CTAButton from "../component/core/HomePage/Button"
-import CodeBlocks from "../component/core/HomePage/CodeBlock"
-import ExploreMore from "../component/core/HomePage/ExploreMore"
-import HighlightText from "../component/core/HomePage/HighlightText"
-import InstructorSection from "../component/core/HomePage/InstructorSection"
-import LearningLanguageSection from "../component/core/HomePage/LearningLanguageSection"
-import TimelineSection from "../component/core/HomePage/TimeLineSection"
+import { resetPassword } from "../services/operations/authAPI";
 
-function Home() {
+function UpdatePassword() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { loading } = useSelector((state) => state.auth);
+  const [formData, setFormData] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const { password, confirmPassword } = formData;
+  const { id } = useParams();
+
+  const handleOnChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    // Token can come from useParams or url pathname
+    const token = id || location.pathname.split("/").at(-1);
+    dispatch(resetPassword(password, confirmPassword, token, navigate));
+  };
+
   return (
-    <div>
-      {/* Section 1 */}
-      <div className="relative mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 text-white">
-        {/* Become a Instructor Button */}
-        <Link to={"/signup"}>
-          <div className="group mx-auto mt-16 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
-            <div className="flex flex-row items-center gap-2 rounded-full px-10 py-[5px] transition-all duration-200 group-hover:bg-richblack-900">
-              <p>Become an Instructor</p>
-              <FaArrowRight />
-            </div>
-          </div>
-        </Link>
+    <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
+      {loading ? (
+        <div className="spinner"></div>
+      ) : (
+        <div className="max-w-[500px] p-4 lg:p-8">
+          <h1 className="text-[1.875rem] font-semibold leading-[2.375rem] text-richblack-5">
+            Choose new password
+          </h1>
+          <p className="my-4 text-[1.125rem] leading-[1.625rem] text-richblack-100">
+            Almost done. Enter your new password and youre all set.
+          </p>
+          <form onSubmit={handleOnSubmit}>
+            <label className="relative">
+              <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+                New Password <sup className="text-pink-200">*</sup>
+              </p>
+              <input
+                required
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={password}
+                onChange={handleOnChange}
+                placeholder="Enter Password"
+                className="form-style w-full !pr-10"
+              />
+              <span
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-[38px] z-[10] cursor-pointer"
+              >
+                {showPassword ? (
+                  <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
+                ) : (
+                  <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+                )}
+              </span>
+            </label>
+            <label className="relative mt-3 block">
+              <p className="mb-1 text-[0.875rem] leading-[1.375rem] text-richblack-5">
+                Confirm New Password <sup className="text-pink-200">*</sup>
+              </p>
+              <input
+                required
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={handleOnChange}
+                placeholder="Confirm Password"
+                className="form-style w-full !pr-10"
+              />
+              <span
+                onClick={() => setShowConfirmPassword((prev) => !prev)}
+                className="absolute right-3 top-[38px] z-[10] cursor-pointer"
+              >
+                {showConfirmPassword ? (
+                  <AiOutlineEyeInvisible fontSize={24} fill="#AFB2BF" />
+                ) : (
+                  <AiOutlineEye fontSize={24} fill="#AFB2BF" />
+                )}
+              </span>
+            </label>
 
-        {/* Heading */}
-        <div className="text-center text-4xl font-semibold">
-          Empower Your Future with
-          <HighlightText text={"Coding Skills"} />
-        </div>
-
-        {/* Sub Heading */}
-        <div className="-mt-3 w-[90%] text-center text-lg font-bold text-richblack-300">
-          With our online coding courses, you can learn at your own pace, from
-          anywhere in the world, and get access to a wealth of resources,
-          including hands-on projects, quizzes, and personalized feedback from
-          instructors.
-        </div>
-
-        {/* CTA Buttons */}
-        <div className="mt-8 flex flex-row gap-7">
-          <CTAButton active={true} linkto={"/signup"}>
-            Learn More
-          </CTAButton>
-          <CTAButton active={false} linkto={"/login"}>
-            Book a Demo
-          </CTAButton>
-        </div>
-
-        {/* Video */}
-        <div className="mx-3 my-7 shadow-[10px_-5px_50px_-5px] shadow-blue-200">
-          <video
-            className="shadow-[20px_20px_rgba(255,255,255)]"
-            muted
-            loop
-            autoPlay
-          >
-            <source src={Banner} type="video/mp4" />
-          </video>
-        </div>
-
-        {/* Code Section 1  */}
-        <div>
-          <CodeBlocks
-            position={"lg:flex-row"}
-            heading={
-              <div className="text-4xl font-semibold">
-                Unlock your
-                <HighlightText text={"coding potential"} /> with our online
-                courses.
-              </div>
-            }
-            subheading={
-              "Our courses are designed and taught by industry experts who have years of experience in coding and are passionate about sharing their knowledge with you."
-            }
-            ctabtn1={{
-              btnText: "Try it Yourself",
-              link: "/signup",
-              active: true,
-            }}
-            ctabtn2={{
-              btnText: "Learn More",
-              link: "/signup",
-              active: false,
-            }}
-            codeColor={"text-yellow-25"}
-            codeblock={`<!DOCTYPE html>\n <html lang="en">\n<head>\n<title>This is myPage</title>\n</head>\n<body>\n<h1><a href="/">Header</a></h1>\n<nav> <a href="/one">One</a> <a href="/two">Two</a> <a href="/three">Three</a>\n</nav>\n</body>`}
-            backgroundGradient={<div className="codeblock1 absolute"></div>}
-          />
-        </div>
-
-        {/* Code Section 2 */}
-        <div>
-          <CodeBlocks
-            position={"lg:flex-row-reverse"}
-            heading={
-              <div className="w-[100%] text-4xl font-semibold lg:w-[50%]">
-                Start
-                <HighlightText text={"coding in seconds"} />
-              </div>
-            }
-            subheading={
-              "Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson."
-            }
-            ctabtn1={{
-              btnText: "Continue Lesson",
-              link: "/signup",
-              active: true,
-            }}
-            ctabtn2={{
-              btnText: "Learn More",
-              link: "/signup",
-              active: false,
-            }}
-            codeColor={"text-white"}
-            codeblock={`import React from "react";\n import CTAButton from "./Button";\nimport TypeAnimation from "react-type";\nimport { FaArrowRight } from "react-icons/fa";\n\nconst Home = () => {\nreturn (\n<div>Home</div>\n)\n}\nexport default Home;`}
-            backgroundGradient={<div className="codeblock2 absolute"></div>}
-          />
-        </div>
-
-        {/* Explore Section */}
-        <ExploreMore />
-      </div>
-
-      {/* Section 2 */}
-      <div className="bg-pure-greys-5 text-richblack-700">
-        <div className="homepage_bg h-[320px]">
-          {/* Explore Full Catagory Section */}
-          <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8">
-            <div className="lg:h-[150px]"></div>
-            <div className="flex flex-row gap-7 text-white lg:mt-8">
-              <CTAButton active={true} linkto={"/signup"}>
-                <div className="flex items-center gap-2">
-                  Explore Full Catalog
-                  <FaArrowRight />
-                </div>
-              </CTAButton>
-              <CTAButton active={false} linkto={"/login"}>
-                Learn More
-              </CTAButton>
-            </div>
+            <button
+              type="submit"
+              className="mt-6 w-full rounded-[8px] bg-yellow-50 py-[12px] px-[12px] font-medium text-richblack-900"
+            >
+              Reset Password
+            </button>
+          </form>
+          <div className="mt-6 flex items-center justify-between">
+            <Link to="/login">
+              <p className="flex items-center gap-x-2 text-richblack-5">
+                <BiArrowBack /> Back To Login
+              </p>
+            </Link>
           </div>
         </div>
-
-        <div className="mx-auto flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 ">
-          {/* Job that is in Demand - Section 1 */}
-          <div className="mb-10 mt-[-100px] flex flex-col justify-between gap-7 lg:mt-20 lg:flex-row lg:gap-0">
-            <div className="text-4xl font-semibold lg:w-[45%] ">
-              Get the skills you need for a{" "}
-              <HighlightText text={"job that is in demand."} />
-            </div>
-            <div className="flex flex-col items-start gap-10 lg:w-[40%]">
-              <div className="text-[16px]">
-                The modern StudyNotion is the dictates its own terms. Today, to
-                be a competitive specialist requires more than professional
-                skills.
-              </div>
-              <CTAButton active={true} linkto={"/signup"}>
-                <div className="">Learn More</div>
-              </CTAButton>
-            </div>
-          </div>
-
-          {/* Timeline Section - Section 2 */}
-          <TimelineSection />
-
-          {/* Learning Language Section - Section 3 */}
-          <LearningLanguageSection />
-        </div>
-      </div>
-
-      {/* Section 3 */}
-      <div className="relative mx-auto my-20 flex w-11/12 max-w-maxContent flex-col items-center justify-between gap-8 bg-richblack-900 text-white">
-        {/* Become a instructor section */}
-        <InstructorSection />
-
-        {/* Reviws from Other Learner */}
-        <h1 className="text-center text-4xl font-semibold mt-8">
-          Reviews from other learners
-        </h1>
-        <ReviewSlider />
-      </div>
-
-      {/* Footer */}
-      <Footer />
+      )}
     </div>
-  )
+  );
 }
 
-export default Home
+export default UpdatePassword;

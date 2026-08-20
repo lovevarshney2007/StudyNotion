@@ -6,20 +6,23 @@ const ratingAndReviewSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  course: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "Course",
+  },
   rating: {
     type: Number,
     required: true,
+    min: 1,
+    max: 5,
   },
   review: {
     type: String,
     required: true,
     trim: true,
-    min: 1,
-      max: 5,
   },
-  
 }, { timestamps: true });
-
 
 // prevent duplicate review by same user on same course
 ratingAndReviewSchema.index({ user: 1, course: 1 }, { unique: true });

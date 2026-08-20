@@ -1,10 +1,28 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
+import app from '../index.js';
 
-// ─── Auth Route Tests ──────────────────────────────────────────────────────────
-// These tests call the actual API endpoints.
-// Set BASE_URL to your running server (e.g. http://localhost:4000).
-const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:4000';
+let server;
+let BASE_URL;
+
+import mongoose from 'mongoose';
+
+before(async () => {
+  await new Promise((resolve) => {
+    server = app.listen(0, () => {
+      const port = server.address().port;
+      BASE_URL = `http://127.0.0.1:${port}`;
+      resolve();
+    });
+  });
+});
+
+after(async () => {
+  if (server) {
+    await new Promise((resolve) => server.close(resolve));
+  }
+  await mongoose.disconnect();
+});
 
 async function post(path, body) {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -63,25 +81,22 @@ describe('POST /api/v1/auth/login', () => {
   });
 });
 
-// ── OTP Verify ─────────────────────────────────────────────────────────────
-describe('POST /api/v1/auth/verify-otp', () => {
-  it('should return 400 for invalid or expired OTP', async () => {
-    const { status, body } = await post('/api/v1/auth/verifyOTP', {
-      email: 'test@example.com',
-      otp: '000000',
-    });
-    assert.ok(status === 400 || status === 404);
+// ── Send OTP ───────────────────────────────────────────────────────────────
+describe('POST /api/v1/auth/sendotp', () => {
+  it('should return 400 when email is missing', async () => {
+    const { status, body } = await post('/api/v1/auth/sendotp', {});
+    assert.equal(status, 400);
     assert.equal(body.success, false);
   });
 });
 
 // ── Forgot Password ────────────────────────────────────────────────────────
 describe('POST /api/v1/auth/reset-password-token', () => {
-  it('should return 400 for unregistered email', async () => {
+  it('should return 404 for unregistered email', async () => {
     const { status, body } = await post('/api/v1/auth/reset-password-token', {
       email: 'nobody@example.com',
     });
-    assert.ok(status === 400 || status === 404);
+    assert.equal(status, 404);
     assert.equal(body.success, false);
   });
 });
